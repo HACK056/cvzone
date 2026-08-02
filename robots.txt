@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hack056.github.io/cvzone-site/sitemap.xml
