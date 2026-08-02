@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CVZone — لوحة التحكم</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root {
+  --gold: #d4af37;
+  --gold-light: #e8c547;
+  --bg: #0a0e1a;
+  --card: #111827;
+  --card-hover: #1a2235;
+  --border: rgba(255,255,255,0.08);
+  --text: #f8fafc;
+  --text-dim: #94a3b8;
+  --text-muted: #64748b;
+  --danger: #ef4444;
+  --success: #22c55e;
+  --radius: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ═══ LOGIN PAGE ═══ */
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+.login-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+.login-box h2 { color: var(--gold); margin-bottom: 8px; font-size: 22px; }
+.login-box p { color: var(--text-dim); font-size: 13px; margin-bottom: 24px; }
+.login-box input {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(4,6,10,0.7);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  margin-bottom: 14px;
+  text-align: center;
+}
+.login-box input:focus { border-color: var(--gold); }
+.login-btn {
+  width: 100%;
+  padding: 13px;
+  background: var(--gold);
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 15px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: 0.3s;
+}
+.login-btn:hover { box-shadow: 0 8px 25px rgba(212,175,55,0.3); }
+.login-error { color: var(--danger); font-size: 13px; margin-top: 10px; display: none; }
+
+/* ═══ ADMIN DASHBOARD ═══ */
+.admin-page { display: none; min-height: 100vh; }
+.admin-page.active { display: block; }
+
+/* Topbar */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.topbar-logo { font-size: 18px; font-weight: 800; color: var(--gold); }
+.topbar-logo span { color: var(--text); }
+.topbar-actions { display: flex; gap: 12px; align-items: center; }
+.topbar-btn {
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.topbar-btn:hover { border-color: var(--gold); color: var(--gold); }
+.topbar-btn.danger:hover { border-color: var(--danger); color: var(--danger); }
+
+/* Layout */
+.admin-content {
+  display: flex;
+  min-height: calc(100vh - 60px);
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background: var(--card);
+  border-left: 1px solid var(--border);
+  padding: 20px 0;
+  position: sticky;
+  top: 60px;
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  color: var(--text-dim);
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.3s;
+  border-right: 3px solid transparent;
+}
+.sidebar-item:hover { background: var(--card-hover); color: var(--text); }
+.sidebar-item.active {
+  background: rgba(212,175,55,0.08);
+  color: var(--gold);
+  border-right-color: var(--gold);
+}
+.sidebar-item i { width: 20px; text-align: center; }
+
+/* Main Panel */
+.main-panel {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+.panel-section { display: none; }
+.panel-section.active { display: block; }
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.section-title { font-size: 20px; font-weight: 700; }
+.section-title i { color: var(--gold); margin-left: 8px; }
+
+.add-btn {
+  padding: 10px 20px;
+  background: var(--gold);
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.3s;
+}
+.add-btn:hover { box-shadow: 0 6px 20px rgba(212,175,55,0.3); }
+
+/* Cards Grid */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+/* Portfolio Card */
+.port-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: 0.3s;
+}
+.port-card:hover { border-color: rgba(212,175,55,0.3); }
+.port-card-img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
+.port-card-body {
+  padding: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.port-card-actions { display: flex; gap: 8px; }
+.icon-btn {
+  width: 34px; height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+  font-size: 14px;
+}
+.icon-btn:hover { color: var(--gold); border-color: var(--gold); }
+.icon-btn.danger:hover { color: var(--danger); border-color: var(--danger); }
+
+/* Testimonial Card */
+.test-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+}
+.test-card-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px; }
+.test-card-name { font-weight: 700; font-size: 14px; }
+.test-card-text { font-size: 13px; color: var(--text-dim); line-height: 1.6; margin-bottom: 12px; }
+.test-card-actions { display: flex; gap: 8px; }
+
+/* Comments */
+.comment-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.comment-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.comment-card-name { font-weight: 700; font-size: 13px; }
+.comment-card-time { font-size: 11px; color: var(--text-muted); }
+.comment-card-text { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+.comment-card-actions { display: flex; gap: 8px; margin-top: 10px; }
+
+/* Review Reply */
+.review-reply {
+  background: var(--card-hover);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-top: 8px;
+}
+.review-reply-name { font-weight: 700; font-size: 12px; color: var(--gold); }
+.review-reply-text { font-size: 12px; color: var(--text-dim); margin-top: 4px; }
+
+/* Modal */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.active { display: flex; }
+.modal {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.modal h3 { color: var(--gold); margin-bottom: 18px; font-size: 17px; }
+.form-row { margin-bottom: 14px; }
+.form-row label { display: block; font-size: 12px; color: var(--text-dim); margin-bottom: 6px; font-weight: 500; }
+.form-row input, .form-row textarea, .form-row select {
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(4,6,10,0.7);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+}
+.form-row input:focus, .form-row textarea:focus { border-color: var(--gold); }
+.form-row textarea { resize: vertical; min-height: 70px; }
+
+.modal-actions { display: flex; gap: 10px; margin-top: 18px; }
+.modal-btn {
+  flex: 1;
+  padding: 11px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: 0.3s;
+}
+.modal-btn.primary { background: var(--gold); color: #000; }
+.modal-btn.primary:hover { box-shadow: 0 6px 20px rgba(212,175,55,0.3); }
+.modal-btn.secondary { background: rgba(255,255,255,0.06); color: var(--text-dim); border: 1px solid var(--border); }
+.modal-btn.danger { background: var(--danger); color: #fff; }
+
+/* File Upload */
+.file-upload-area {
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-bottom: 14px;
+}
+.file-upload-area:hover { border-color: var(--gold); background: rgba(212,175,55,0.04); }
+.file-upload-area i { font-size: 32px; color: var(--text-muted); margin-bottom: 8px; }
+.file-upload-area p { font-size: 13px; color: var(--text-muted); }
+.file-upload-area.has-file { border-color: var(--success); }
+.file-upload-area.has-file i { color: var(--success); }
+.file-upload-area img { max-width: 200px; max-height: 200px; border-radius: 8px; margin-top: 10px; }
+
+/* Loading */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: var(--text-muted);
+  font-size: 14px;
+  gap: 10px;
+}
+.loading i { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+}
+.empty-state i { font-size: 40px; margin-bottom: 12px; opacity: 0.4; }
+.empty-state p { font-size: 14px; }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--success);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 9999;
+  transition: 0.4s;
+  opacity: 0;
+}
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+.toast.error { background: var(--danger); }
+
+/* Cloudinary Config */
+.config-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.config-box h3 { color: var(--gold); margin-bottom: 12px; font-size: 16px; }
+.config-box p { color: var(--text-dim); font-size: 13px; margin-bottom: 16px; line-height: 1.7; }
+.config-box a { color: var(--gold); text-decoration: none; }
+.config-box a:hover { text-decoration: underline; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-content { flex-direction: column; }
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    top: 0;
+    border-left: none;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    overflow-x: auto;
+    padding: 10px;
+    gap: 4px;
+  }
+  .sidebar-item {
+    padding: 10px 14px;
+    border-right: none;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    font-size: 12px;
+  }
+  .sidebar-item.active { border-right-color: transparent; border-bottom-color: var(--gold); }
+  .main-panel { padding: 16px; }
+  .cards-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ LOGIN PAGE ═══ -->
+<div class="login-page" id="loginPage">
+  <div class="login-box">
+    <h2>🔐 لوحة تحكم CVZone</h2>
+    <p>أدخل كلمة المرور للوصول إلى لوحة التحكم</p>
+    <input type="password" id="adminPassword" placeholder="كلمة المرور" onkeydown="if(event.key==='Enter')login()">
+    <button class="login-btn" onclick="login()">دخول</button>
+    <p class="login-error" id="loginError">كلمة المرور غير صحيحة!</p>
+  </div>
+</div>
+
+<!-- ═══ ADMIN PAGE ═══ -->
+<div class="admin-page" id="adminPage">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-logo">CV<span>Zone</span> <small style="font-size:12px;color:var(--text-dim)">| لوحة التحكم</small></div>
+    <div class="topbar-actions">
+      <a href="index.html" target="_blank" class="topbar-btn"><i class="fas fa-eye"></i> عرض الموقع</a>
+      <button class="topbar-btn danger" onclick="logout()"><i class="fas fa-sign-out-alt"></i> خروج</button>
+    </div>
+  </div>
+
+  <div class="admin-content">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-item active" onclick="switchTab('portfolio')" data-tab="portfolio">
+        <i class="fas fa-images"></i> أعمالنا
+      </div>
+      <div class="sidebar-item" onclick="switchTab('testimonials')" data-tab="testimonials">
+        <i class="fas fa-star"></i> آراء العملاء
+      </div>
+      <div class="sidebar-item" onclick="switchTab('comments')" data-tab="comments">
+        <i class="fas fa-comments"></i> التعليقات
+      </div>
+      <div class="sidebar-item" onclick="switchTab('settings')" data-tab="settings">
+        <i class="fas fa-cog"></i> الإعدادات
+      </div>
+    </div>
+
+    <!-- Main Panel -->
+    <div class="main-panel">
+
+      <!-- ═══ PORTFOLIO SECTION ═══ -->
+      <div class="panel-section active" id="sec-portfolio">
+        <div class="section-header">
+          <div class="section-title"><i class="fas fa-images"></i> إدارة أعمالنا</div>
+          <button class="add-btn" onclick="openPortfolioModal()"><i class="fas fa-plus"></i> إضافة عمل جديد</button>
+        </div>
+        <div id="portfolio-grid" class="cards-grid">
+          <div class="loading"><i class="fas fa-spinner"></i> جاري التحميل...</div>
+        </div>
+      </div>
+
+      <!-- ═══ TESTIMONIALS SECTION ═══ -->
+      <div class="panel-section" id="sec-testimonials">
+        <div class="section-header">
+          <div class="section-title"><i class="fas fa-star"></i> إدارة آراء العملاء</div>
+          <button class="add-btn" onclick="openTestimonialModal()"><i class="fas fa-plus"></i> إضافة رأي جديد</button>
+        </div>
+        <div id="testimonials-grid" class="cards-grid">
+          <div class="loading"><i class="fas fa-spinner"></i> جاري التحميل...</div>
+        </div>
+      </div>
+
+      <!-- ═══ COMMENTS SECTION ═══ -->
+      <div class="panel-section" id="sec-comments">
+        <div class="section-header">
+          <div class="section-title"><i class="fas fa-comments"></i> التعليقات الواردة</div>
+          <button class="add-btn" onclick="loadComments()"><i class="fas fa-sync"></i> تحديث</button>
+        </div>
+        <div id="comments-list">
+          <div class="loading"><i class="fas fa-spinner"></i> جاري التحميل...</div>
+        </div>
+      </div>
+
+      <!-- ═══ SETTINGS SECTION ═══ -->
+      <div class="panel-section" id="sec-settings">
+        <div class="section-title"><i class="fas fa-cog"></i> الإعدادات</div>
+
+        <div class="config-box" style="margin-top:18px;">
+          <h3><i class="fab fa-cloudinary" style="color:#2563eb"></i> إعداد Cloudinary (لرفع الصور)</h3>
+          <p>
+            1. اذهب إلى <a href="https://cloudinary.com" target="_blank">cloudinary.com</a> وسجل حساب مجاني<br>
+            2. من Dashboard انسخ <b>Cloud Name</b> و <b>Upload Preset</b><br>
+            3. لإنشاء Upload Preset: Settings → Upload → Add upload preset → Signing mode: Unsigned → Save
+          </p>
+          <div class="form-row">
+            <label>Cloud Name</label>
+            <input type="text" id="cloudinaryCloudName" placeholder="مثال: dxhxxxxx">
+          </div>
+          <div class="form-row">
+            <label>Upload Preset</label>
+            <input type="text" id="cloudinaryPreset" placeholder="مثال: cvzone_upload">
+          </div>
+          <button class="modal-btn primary" style="width:auto;padding:10px 24px;margin-top:8px;" onclick="saveCloudinaryConfig()">
+            <i class="fas fa-save"></i> حفظ الإعدادات
+          </button>
+        </div>
+
+        <div class="config-box">
+          <h3><i class="fas fa-key" style="color:var(--gold)"></i> تغيير كلمة المرور</h3>
+          <div class="form-row">
+            <label>كلمة المرور الجديدة</label>
+            <input type="password" id="newPassword" placeholder="أدخل كلمة المرور الجديدة">
+          </div>
+          <button class="modal-btn primary" style="width:auto;padding:10px 24px;margin-top:8px;" onclick="changePassword()">
+            <i class="fas fa-key"></i> تحديث
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PORTFOLIO MODAL ═══ -->
+<div class="modal-overlay" id="portfolioModal">
+  <div class="modal">
+    <h3 id="portfolioModalTitle"><i class="fas fa-plus-circle" style="margin-left:8px"></i>إضافة عمل جديد</h3>
+    <div class="form-row">
+      <label>ارفع صورة الـ CV</label>
+      <div class="file-upload-area" id="portfolioUploadArea" onclick="document.getElementById('portfolioFile').click()">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <p>اضغط هنا لرفع الصورة</p>
+        <input type="file" id="portfolioFile" accept="image/*" style="display:none" onchange="handlePortfolioFile(this)">
+      </div>
+    </div>
+    <div class="form-row">
+      <label>الوصف (اختياري)</label>
+      <input type="text" id="portfolioDesc" placeholder="مثال: سيرة ذاتية لمهندس برمجيات">
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn primary" onclick="savePortfolio()" id="portfolioSaveBtn">حفظ</button>
+      <button class="modal-btn secondary" onclick="closeModal('portfolioModal')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TESTIMONIAL MODAL ═══ -->
+<div class="modal-overlay" id="testimonialModal">
+  <div class="modal">
+    <h3 id="testimonialModalTitle"><i class="fas fa-plus-circle" style="margin-left:8px"></i>إضافة رأي جديد</h3>
+    <div class="form-row">
+      <label>اسم العميل *</label>
+      <input type="text" id="testName" placeholder="مثال: أحمد محمد">
+    </div>
+    <div class="form-row">
+      <label>التعليق *</label>
+      <textarea id="testText" placeholder="اكتب رأي العميل هنا..."></textarea>
+    </div>
+    <div class="form-row">
+      <label>التاريخ (اختياري)</label>
+      <input type="text" id="testDate" placeholder="مثال: منذ يومين">
+    </div>
+    <div class="form-row">
+      <label>صورة/screenshots (اختياري)</label>
+      <div class="file-upload-area" id="testUploadArea" onclick="document.getElementById('testFile').click()">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <p>اضغط هنا لرفع صورة</p>
+        <input type="file" id="testFile" accept="image/*" style="display:none" onchange="handleTestFile(this)">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn primary" onclick="saveTestimonial()">حفظ</button>
+      <button class="modal-btn secondary" onclick="closeModal('testimonialModal')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DELETE CONFIRM MODAL ═══ -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal" style="text-align:center;">
+    <h3><i class="fas fa-exclamation-triangle" style="color:var(--danger);margin-left:8px"></i>تأكيد الحذف</h3>
+    <p style="color:var(--text-dim);margin-bottom:18px;">هل أنت متأكد من حذف هذا العنصر؟ لا يمكن التراجع.</p>
+    <div class="modal-actions">
+      <button class="modal-btn danger" id="confirmDeleteBtn" onclick="confirmDelete()">نعم، احذف</button>
+      <button class="modal-btn secondary" onclick="closeModal('deleteModal')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Firebase SDKs -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc,
+  onSnapshot, query, orderBy
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// Firebase Config
+const firebaseConfig = {
+  apiKey: "AIzaSyCDRuFbCBtiX6MLzBeXEIDyMLMybkGwEYc",
+  authDomain: "cvzone-app-9a41b.firebaseapp.com",
+  projectId: "cvzone-app-9a41b",
+  storageBucket: "cvzone-app-9a41b.firebasestorage.app",
+  messagingSenderId: "126192034228",
+  appId: "1:126192034228:web:201abc488c6f20835bd2e1",
+  measurementId: "G-BBPL0W5Q6L"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Make Firestore available globally
+window.db = db;
+window.firestore = { collection, addDoc, getDocs, deleteDoc, doc, updateDoc, onSnapshot, query, orderBy };
+
+// ─── AUTH ───
+const ADMIN_PASSWORD_KEY = 'cvzone_admin_pass';
+const DEFAULT_PASSWORD = 'cvzone2024';
+
+window.login = function() {
+  const pass = document.getElementById('adminPassword').value;
+  const saved = localStorage.getItem(ADMIN_PASSWORD_KEY) || DEFAULT_PASSWORD;
+  if (pass === saved) {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('adminPage').classList.add('active');
+    localStorage.setItem('cvzone_logged_in', 'true');
+    loadAllData();
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+    setTimeout(() => document.getElementById('loginError').style.display = 'none', 3000);
+  }
+};
+
+window.logout = function() {
+  localStorage.removeItem('cvzone_logged_in');
+  document.getElementById('adminPage').classList.remove('active');
+  document.getElementById('loginPage').style.display = 'flex';
+};
+
+// Auto login
+if (localStorage.getItem('cvzone_logged_in') === 'true') {
+  document.getElementById('loginPage').style.display = 'none';
+  document.getElementById('adminPage').classList.add('active');
+  loadAllData();
+}
+
+// ─── TABS ───
+window.switchTab = function(tab) {
+  document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+  document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+  document.querySelectorAll('.panel-section').forEach(el => el.classList.remove('active'));
+  document.getElementById(`sec-${tab}`).classList.add('active');
+  if (tab === 'comments') loadComments();
+};
+
+// ─── MODALS ───
+window.openModal = function(id) {
+  document.getElementById(id).classList.add('active');
+};
+window.closeModal = function(id) {
+  document.getElementById(id).classList.remove('active');
+};
+
+// ─── TOAST ───
+window.showToast = function(msg, isError = false) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.className = 'toast' + (isError ? ' error' : '');
+  setTimeout(() => toast.classList.add('show'), 10);
+  setTimeout(() => toast.classList.remove('show'), 3000);
+};
+
+// ─── UPLOAD TO CLOUDINARY ───
+window.uploadToCloudinary = async function(file) {
+  const cloudName = localStorage.getItem('cvzone_cloud_name');
+  const preset = localStorage.getItem('cvzone_preset');
+
+  if (!cloudName || !preset) {
+    showToast('يجب إعداد Cloudinary أولاً من صفحة الإعدادات!', true);
+    return null;
+  }
+
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', preset);
+
+  try {
+    showToast('جاري رفع الصورة...');
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+    if (data.secure_url) {
+      showToast('تم رفع الصورة بنجاح!');
+      return data.secure_url;
+    } else {
+      showToast('فشل رفع الصورة: ' + (data.error?.message || ''), true);
+      return null;
+    }
+  } catch (e) {
+    showToast('خطأ في الرفع: ' + e.message, true);
+    return null;
+  }
+};
+
+// ─── PORTFOLIO FILE ───
+let portfolioFileData = null;
+window.handlePortfolioFile = function(input) {
+  if (input.files[0]) {
+    portfolioFileData = input.files[0];
+    const area = document.getElementById('portfolioUploadArea');
+    area.classList.add('has-file');
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      area.innerHTML = `<img src="${e.target.result}"><p style="margin-top:8px;color:var(--success)">${input.files[0].name}</p><input type="file" id="portfolioFile" accept="image/*" style="display:none" onchange="handlePortfolioFile(this)">`;
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+};
+
+// ─── TEST FILE ───
+let testFileData = null;
+window.handleTestFile = function(input) {
+  if (input.files[0]) {
+    testFileData = input.files[0];
+    const area = document.getElementById('testUploadArea');
+    area.classList.add('has-file');
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      area.innerHTML = `<img src="${e.target.result}"><p style="margin-top:8px;color:var(--success)">${input.files[0].name}</p><input type="file" id="testFile" accept="image/*" style="display:none" onchange="handleTestFile(this)">`;
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+};
+
+// ══════════════════════════════════════
+//  PORTFOLIO CRUD
+// ══════════════════════════════════════
+let editingPortfolioId = null;
+
+window.openPortfolioModal = function(id = null) {
+  editingPortfolioId = id;
+  document.getElementById('portfolioModalTitle').innerHTML = id
+    ? '<i class="fas fa-edit" style="margin-left:8px"></i>تعديل العمل'
+    : '<i class="fas fa-plus-circle" style="margin-left:8px"></i>إضافة عمل جديد';
+  document.getElementById('portfolioDesc').value = '';
+  portfolioFileData = null;
+  document.getElementById('portfolioUploadArea').innerHTML = '<i class="fas fa-cloud-upload-alt"></i><p>اضغط هنا لرفع الصورة</p><input type="file" id="portfolioFile" accept="image/*" style="display:none" onchange="handlePortfolioFile(this)">';
+  document.getElementById('portfolioUploadArea').classList.remove('has-file');
+
+  if (id) {
+    // Load existing data
+    const card = document.querySelector(`[data-port-id="${id}"]`);
+    if (card) {
+      document.getElementById('portfolioDesc').value = card.dataset.desc || '';
+    }
+  }
+
+  openModal('portfolioModal');
+};
+
+window.savePortfolio = async function() {
+  let imageUrl = null;
+
+  if (portfolioFileData) {
+    imageUrl = await uploadToCloudinary(portfolioFileData);
+    if (!imageUrl) return;
+  } else if (!editingPortfolioId) {
+    showToast('يجب رفع صورة أولاً!', true);
+    return;
+  }
+
+  const desc = document.getElementById('portfolioDesc').value.trim();
+
+  try {
+    if (editingPortfolioId) {
+      const updateData = { desc };
+      if (imageUrl) updateData.imageUrl = imageUrl;
+      await window.firestore.updateDoc(window.db.collection('portfolio').doc(editingPortfolioId), updateData);
+      showToast('تم تحديث العمل بنجاح!');
+    } else {
+      if (!imageUrl) return;
+      await window.firestore.addDoc(window.firestore.collection(window.db, 'portfolio'), {
+        imageUrl,
+        desc,
+        createdAt: Date.now(),
+        order: Date.now()
+      });
+      showToast('تم إضافة العمل بنجاح!');
+    }
+    closeModal('portfolioModal');
+    loadPortfolio();
+  } catch (e) {
+    showToast('خطأ: ' + e.message, true);
+  }
+};
+
+function loadPortfolio() {
+  const grid = document.getElementById('portfolio-grid');
+  grid.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i> جاري التحميل...</div>';
+
+  window.firestore.onSnapshot(
+    window.firestore.query(window.firestore.collection(window.db, 'portfolio'), window.firestore.orderBy('order', 'desc')),
+    (snapshot) => {
+      if (snapshot.empty) {
+        grid.innerHTML = '<div class="empty-state"><i class="fas fa-images"></i><p>لا توجد أعمال بعد. أضف أول عمل!</p></div>';
+        return;
+      }
+      grid.innerHTML = '';
+      snapshot.forEach(docSnap => {
+        const d = docSnap.data();
+        const card = document.createElement('div');
+        card.className = 'port-card';
+        card.dataset.portId = docSnap.id;
+        card.dataset.desc = d.desc || '';
+        card.innerHTML = `
+          <img src="${d.imageUrl}" class="port-card-img" alt="${d.desc || ''}" loading="lazy">
+          <div class="port-card-body">
+            <span style="font-size:12px;color:var(--text-dim);max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${d.desc || 'بدون وصف'}</span>
+            <div class="port-card-actions">
+              <button class="icon-btn" onclick="openPortfolioModal('${docSnap.id}')" title="تعديل"><i class="fas fa-edit"></i></button>
+              <button class="icon-btn danger" onclick="deletePortfolio('${docSnap.id}')" title="حذف"><i class="fas fa-trash"></i></button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+  );
+}
+
+let deleteTarget = null;
+let deleteType = null;
+
+window.deletePortfolio = function(id) {
+  deleteTarget = id;
+  deleteType = 'portfolio';
+  openModal('deleteModal');
+};
+
+window.confirmDelete = async function() {
+  try {
+    if (deleteType === 'portfolio') {
+      await window.firestore.deleteDoc(window.firestore.doc(window.db, 'portfolio', deleteTarget));
+      showToast('تم حذف العمل بنجاح!');
+      loadPortfolio();
+    } else if (deleteType === 'testimonial') {
+      await window.firestore.deleteDoc(window.firestore.doc(window.db, 'testimonials', deleteTarget));
+      showToast('تم حذف الرأي بنجاح!');
+      loadTestimonials();
+    } else if (deleteType === 'comment') {
+      await window.firestore.deleteDoc(window.firestore.doc(window.db, 'comments', deleteTarget));
+      showToast('تم حذف التعليق بنجاح!');
+      loadComments();
+    }
+  } catch (e) {
+    showToast('خطأ في الحذف: ' + e.message, true);
+  }
+  closeModal('deleteModal');
+};
+
+// ══════════════════════════════════════
+//  TESTIMONIALS CRUD
+// ══════════════════════════════════════
+let editingTestimonialId = null;
+
+window.openTestimonialModal = function(id = null) {
+  editingTestimonialId = id;
+  document.getElementById('testimonialModalTitle').innerHTML = id
+    ? '<i class="fas fa-edit" style="margin-left:8px"></i>تعديل الرأي'
+    : '<i class="fas fa-plus-circle" style="margin-left:8px"></i>إضافة رأي جديد';
+  document.getElementById('testName').value = '';
+  document.getElementById('testText').value = '';
+  document.getElementById('testDate').value = '';
+  testFileData = null;
+  document.getElementById('testUploadArea').innerHTML = '<i class="fas fa-cloud-upload-alt"></i><p>اضغط هنا لرفع صورة</p><input type="file" id="testFile" accept="image/*" style="display:none" onchange="handleTestFile(this)">';
+  document.getElementById('testUploadArea').classList.remove('has-file');
+
+  if (id) {
+    const card = document.querySelector(`[data-test-id="${id}"]`);
+    if (card) {
+      document.getElementById('testName').value = card.dataset.name || '';
+      document.getElementById('testText').value = card.dataset.text || '';
+      document.getElementById('testDate').value = card.dataset.date || '';
+    }
+  }
+
+  openModal('testimonialModal');
+};
+
+window.saveTestimonial = async function() {
+  const name = document.getElementById('testName').value.trim();
+  const text = document.getElementById('testText').value.trim();
+  const date = document.getElementById('testDate').value.trim() || 'الآن';
+
+  if (!name || !text) {
+    showToast('يجب إدخال الاسم والتعليق!', true);
+    return;
+  }
+
+  let imageUrl = null;
+  if (testFileData) {
+    imageUrl = await uploadToCloudinary(testFileData);
+    if (!imageUrl) return;
+  }
+
+  try {
+    if (editingTestimonialId) {
+      const updateData = { name, text, date };
+      if (imageUrl) updateData.imageUrl = imageUrl;
+      await window.firestore.updateDoc(window.firestore.doc(window.db, 'testimonials', editingTestimonialId), updateData);
+      showToast('تم تحديث الرأي بنجاح!');
+    } else {
+      await window.firestore.addDoc(window.firestore.collection(window.db, 'testimonials'), {
+        name, text, date,
+        imageUrl,
+        createdAt: Date.now()
+      });
+      showToast('تم إضافة الرأي بنجاح!');
+    }
+    closeModal('testimonialModal');
+    loadTestimonials();
+  } catch (e) {
+    showToast('خطأ: ' + e.message, true);
+  }
+};
+
+function loadTestimonials() {
+  const grid = document.getElementById('testimonials-grid');
+  grid.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i> جاري التحميل...</div>';
+
+  window.firestore.onSnapshot(
+    window.firestore.query(window.firestore.collection(window.db, 'testimonials'), window.firestore.orderBy('createdAt', 'desc')),
+    (snapshot) => {
+      if (snapshot.empty) {
+        grid.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i><p>لا توجد آراء بعد. أضف أول رأي!</p></div>';
+        return;
+      }
+      grid.innerHTML = '';
+      snapshot.forEach(docSnap => {
+        const d = docSnap.data();
+        const initials = d.name.split(' ').map(w => w[0]).join('').slice(0, 2);
+        const card = document.createElement('div');
+        card.className = 'test-card';
+        card.dataset.testId = docSnap.id;
+        card.dataset.name = d.name;
+        card.dataset.text = d.text;
+        card.dataset.date = d.date;
+        card.innerHTML = `
+          <div class="test-card-header">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="width:36px;height:36px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;font-size:12px">${initials}</div>
+              <div>
+                <div class="test-card-name">${d.name}</div>
+                <div style="font-size:11px;color:var(--text-muted)">${d.date}</div>
+              </div>
+            </div>
+          </div>
+          <div class="test-card-text">${d.text}</div>
+          ${d.imageUrl ? `<img src="${d.imageUrl}" style="width:100%;border-radius:8px;margin-bottom:10px;" loading="lazy">` : ''}
+          <div class="test-card-actions">
+            <button class="icon-btn" onclick="openTestimonialModal('${docSnap.id}')" title="تعديل"><i class="fas fa-edit"></i></button>
+            <button class="icon-btn danger" onclick="deleteTestimonial('${docSnap.id}')" title="حذف"><i class="fas fa-trash"></i></button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+  );
+}
+
+window.deleteTestimonial = function(id) {
+  deleteTarget = id;
+  deleteType = 'testimonial';
+  openModal('deleteModal');
+};
+
+// ══════════════════════════════════════
+//  COMMENTS (from Firestore)
+// ══════════════════════════════════════
+function loadComments() {
+  const list = document.getElementById('comments-list');
+  list.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i> جاري التحميل...</div>';
+
+  window.firestore.onSnapshot(
+    window.firestore.query(window.firestore.collection(window.db, 'comments'), window.firestore.orderBy('time', 'desc')),
+    (snapshot) => {
+      if (snapshot.empty) {
+        list.innerHTML = '<div class="empty-state"><i class="fas fa-comments"></i><p>لا توجد تعليقات بعد</p></div>';
+        return;
+      }
+      list.innerHTML = '';
+      snapshot.forEach(docSnap => {
+        const d = docSnap.data();
+        const time = new Date(d.time).toLocaleString('ar-EG');
+        const card = document.createElement('div');
+        card.className = 'comment-card';
+        card.innerHTML = `
+          <div class="comment-card-header">
+            <span class="comment-card-name">${d.name}</span>
+            <span class="comment-card-time">${time}</span>
+          </div>
+          <div class="comment-card-text">${d.text}</div>
+          ${d.replies && d.replies.length > 0 ? d.replies.map(r => `
+            <div class="review-reply">
+              <div class="review-reply-name">${r.name}</div>
+              <div class="review-reply-text">${r.text}</div>
+            </div>
+          `).join('') : ''}
+          <div class="comment-card-actions">
+            <button class="icon-btn" onclick="addReply('${docSnap.id}')" title="رد"><i class="fas fa-reply"></i></button>
+            <button class="icon-btn danger" onclick="deleteComment('${docSnap.id}')" title="حذف"><i class="fas fa-trash"></i></button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }
+  );
+}
+
+window.addReply = function(commentId) {
+  const replyName = prompt('اسمك:');
+  if (!replyName) return;
+  const replyText = prompt('الرد:');
+  if (!replyText) return;
+
+  const commentRef = window.firestore.doc(window.db, 'comments', commentId);
+  window.firestore.getDocs(window.firestore.collection(window.db, 'comments')).then(() => {
+    // Simple approach: just add reply
+    const reply = { name: replyName, text: replyText };
+    window.firestore.updateDoc(commentRef, {
+      replies: window.firestore.arrayUnion ? 
+        window.firestore.arrayUnion(reply) : 
+        undefined
+    }).catch(() => {
+      // Fallback: we need to read then update
+      window.firestore.getDocs(window.firestore.query(window.firestore.collection(window.db, 'comments'))).then(snap => {
+        snap.forEach(ds => {
+          if (ds.id === commentId) {
+            const data = ds.data();
+            const replies = data.replies || [];
+            replies.push(reply);
+            window.firestore.updateDoc(commentRef, { replies });
+            showToast('تم إضافة الرد!');
+            loadComments();
+          }
+        });
+      });
+    });
+  });
+};
+
+window.deleteComment = function(id) {
+  deleteTarget = id;
+  deleteType = 'comment';
+  openModal('deleteModal');
+};
+
+// ══════════════════════════════════════
+//  SETTINGS
+// ══════════════════════════════════════
+window.saveCloudinaryConfig = function() {
+  const cloudName = document.getElementById('cloudinaryCloudName').value.trim();
+  const preset = document.getElementById('cloudinaryPreset').value.trim();
+  if (!cloudName || !preset) {
+    showToast('يجب ملء كل الحقول!', true);
+    return;
+  }
+  localStorage.setItem('cvzone_cloud_name', cloudName);
+  localStorage.setItem('cvzone_preset', preset);
+  showToast('تم حفظ إعدادات Cloudinary!');
+};
+
+window.changePassword = function() {
+  const newPass = document.getElementById('newPassword').value.trim();
+  if (!newPass || newPass.length < 4) {
+    showToast('كلمة المرور يجب أن تكون 4 أحرف على الأقل!', true);
+    return;
+  }
+  localStorage.setItem(ADMIN_PASSWORD_KEY, newPass);
+  document.getElementById('newPassword').value = '';
+  showToast('تم تغيير كلمة المرور!');
+};
+
+// Load Cloudinary config
+function loadCloudinaryConfig() {
+  const cn = localStorage.getItem('cvzone_cloud_name');
+  const pr = localStorage.getItem('cvzone_preset');
+  if (cn) document.getElementById('cloudinaryCloudName').value = cn;
+  if (pr) document.getElementById('cloudinaryPreset').value = pr;
+}
+
+// ─── LOAD ALL ───
+function loadAllData() {
+  loadPortfolio();
+  loadTestimonials();
+  loadCloudinaryConfig();
+}
+
+// Init: load Firestore comments also from localStorage fallback
+// The main site will write comments to both localStorage AND Firestore
+</script>
+
+</body>
+</html>
