@@ -80,7 +80,7 @@ body {
 
 /* ═══ ADMIN DASHBOARD ═══ */
 .admin-page { display: none; min-height: 100vh; }
-.admin-page.active { display: block; }
+.admin-page.active { display: flex; flex-direction: column; }
 
 /* Topbar */
 .topbar {
@@ -117,7 +117,7 @@ body {
 /* Layout */
 .admin-content {
   display: flex;
-  min-height: calc(100vh - 60px);
+  flex: 1;
 }
 
 /* Sidebar */
@@ -185,6 +185,57 @@ body {
   transition: 0.3s;
 }
 .add-btn:hover { box-shadow: 0 6px 20px rgba(212,175,55,0.3); }
+
+/* Dashboard Stats */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  text-align: center;
+}
+.stat-icon { font-size: 32px; color: var(--gold); margin-bottom: 10px; }
+.stat-value { font-size: 28px; font-weight: 800; color: var(--gold); margin-bottom: 4px; }
+.stat-label { font-size: 12px; color: var(--text-dim); }
+
+/* Dashboard Widgets */
+.widgets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+.widget {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+.widget-title { font-size: 14px; font-weight: 700; margin-bottom: 16px; color: var(--gold); }
+.widget-item { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.widget-item:last-child { border-bottom: none; }
+.quick-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.quick-btn {
+  padding: 10px 16px;
+  background: rgba(212,175,55,0.1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--gold);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  transition: 0.3s;
+}
+.quick-btn:hover { background: rgba(212,175,55,0.2); }
 
 /* Cards Grid */
 .cards-grid {
@@ -383,7 +434,7 @@ body {
 .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 .toast.error { background: var(--danger); }
 
-/* Cloudinary Config */
+/* Config Box */
 .config-box {
   background: var(--card);
   border: 1px solid var(--border);
@@ -395,6 +446,31 @@ body {
 .config-box p { color: var(--text-dim); font-size: 13px; margin-bottom: 16px; line-height: 1.7; }
 .config-box a { color: var(--gold); text-decoration: none; }
 .config-box a:hover { text-decoration: underline; }
+
+/* Settings Table */
+.settings-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+.settings-table th, .settings-table td {
+  padding: 12px;
+  text-align: right;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.settings-table th { background: rgba(212,175,55,0.08); color: var(--gold); font-weight: 700; }
+.settings-table input {
+  width: 100%;
+  padding: 8px 12px;
+  background: rgba(4,6,10,0.7);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 13px;
+}
+.settings-table input:focus { border-color: var(--gold); outline: none; }
 
 /* Responsive */
 @media (max-width: 768px) {
@@ -421,6 +497,7 @@ body {
   .sidebar-item.active { border-right-color: transparent; border-bottom-color: var(--gold); }
   .main-panel { padding: 16px; }
   .cards-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -452,7 +529,10 @@ body {
   <div class="admin-content">
     <!-- Sidebar -->
     <div class="sidebar">
-      <div class="sidebar-item active" onclick="switchTab('portfolio')" data-tab="portfolio">
+      <div class="sidebar-item active" onclick="switchTab('dashboard')" data-tab="dashboard">
+        <i class="fas fa-chart-line"></i> لوحة القيادة
+      </div>
+      <div class="sidebar-item" onclick="switchTab('portfolio')" data-tab="portfolio">
         <i class="fas fa-images"></i> أعمالنا
       </div>
       <div class="sidebar-item" onclick="switchTab('testimonials')" data-tab="testimonials">
@@ -460,6 +540,9 @@ body {
       </div>
       <div class="sidebar-item" onclick="switchTab('comments')" data-tab="comments">
         <i class="fas fa-comments"></i> التعليقات
+      </div>
+      <div class="sidebar-item" onclick="switchTab('site-settings')" data-tab="site-settings">
+        <i class="fas fa-sliders-h"></i> إعدادات الموقع
       </div>
       <div class="sidebar-item" onclick="switchTab('settings')" data-tab="settings">
         <i class="fas fa-cog"></i> الإعدادات
@@ -469,8 +552,60 @@ body {
     <!-- Main Panel -->
     <div class="main-panel">
 
+      <!-- ═══ DASHBOARD SECTION ═══ -->
+      <div class="panel-section active" id="sec-dashboard">
+        <div class="section-header">
+          <div class="section-title"><i class="fas fa-chart-line"></i> لوحة القيادة</div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-images"></i></div>
+            <div class="stat-value" id="stat-portfolio">0</div>
+            <div class="stat-label">عدد الأعمال</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-star"></i></div>
+            <div class="stat-value" id="stat-testimonials">0</div>
+            <div class="stat-label">عدد الآراء</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-comments"></i></div>
+            <div class="stat-value" id="stat-comments">0</div>
+            <div class="stat-label">عدد التعليقات</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-eye"></i></div>
+            <div class="stat-value" id="stat-visits">0</div>
+            <div class="stat-label">عدد الزيارات</div>
+          </div>
+        </div>
+
+        <!-- Widgets -->
+        <div class="widgets-grid">
+          <!-- Recent Comments Widget -->
+          <div class="widget">
+            <div class="widget-title"><i class="fas fa-comments"></i> آخر التعليقات</div>
+            <div id="recent-comments-list">
+              <div class="loading"><i class="fas fa-spinner"></i> جاري التحميل...</div>
+            </div>
+          </div>
+
+          <!-- Quick Actions Widget -->
+          <div class="widget">
+            <div class="widget-title"><i class="fas fa-bolt"></i> إجراءات سريعة</div>
+            <div class="quick-actions">
+              <button class="quick-btn" onclick="openPortfolioModal()"><i class="fas fa-plus"></i> إضافة عمل جديد</button>
+              <button class="quick-btn" onclick="openTestimonialModal()"><i class="fas fa-plus"></i> إضافة رأي جديد</button>
+              <button class="quick-btn" onclick="switchTab('site-settings')"><i class="fas fa-edit"></i> تعديل بيانات الموقع</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- ═══ PORTFOLIO SECTION ═══ -->
-      <div class="panel-section active" id="sec-portfolio">
+      <div class="panel-section" id="sec-portfolio">
         <div class="section-header">
           <div class="section-title"><i class="fas fa-images"></i> إدارة أعمالنا</div>
           <button class="add-btn" onclick="openPortfolioModal()"><i class="fas fa-plus"></i> إضافة عمل جديد</button>
@@ -494,11 +629,64 @@ body {
       <!-- ═══ COMMENTS SECTION ═══ -->
       <div class="panel-section" id="sec-comments">
         <div class="section-header">
-          <div class="section-title"><i class="fas fa-comments"></i> التعليقات الواردة</div>
+          <div class="section-title"><i class="fas fa-comments"></i> إدارة التعليقات</div>
           <button class="add-btn" onclick="loadComments()"><i class="fas fa-sync"></i> تحديث</button>
         </div>
         <div id="comments-list">
           <div class="loading"><i class="fas fa-spinner"></i> جاري التحميل...</div>
+        </div>
+      </div>
+
+      <!-- ═══ SITE SETTINGS SECTION ═══ -->
+      <div class="panel-section" id="sec-site-settings">
+        <div class="section-header">
+          <div class="section-title"><i class="fas fa-sliders-h"></i> إعدادات الموقع</div>
+        </div>
+
+        <div class="config-box">
+          <h3><i class="fas fa-cog"></i> تعديل بيانات الموقع</h3>
+          <table class="settings-table">
+            <tr>
+              <td style="width:40%"><strong>عنوان الهيرو الرئيسي</strong></td>
+              <td><input type="text" id="heroTitle" placeholder="سيرتك الذاتية هي استثمارك الأول"></td>
+            </tr>
+            <tr>
+              <td><strong>عدد العملاء الناجحين</strong></td>
+              <td><input type="text" id="clientsCount" placeholder="1500"></td>
+            </tr>
+            <tr>
+              <td><strong>معدل القبول</strong></td>
+              <td><input type="text" id="acceptanceRate" placeholder="98"></td>
+            </tr>
+            <tr>
+              <td><strong>وقت التنفيذ</strong></td>
+              <td><input type="text" id="executionTime" placeholder="24h"></td>
+            </tr>
+            <tr>
+              <td><strong>رقم الواتساب</strong></td>
+              <td><input type="text" id="whatsappNumber" placeholder="201092977623"></td>
+            </tr>
+            <tr>
+              <td><strong>رابط فيسبوك</strong></td>
+              <td><input type="text" id="facebookLink" placeholder="https://www.facebook.com/..."></td>
+            </tr>
+            <tr>
+              <td><strong>رابط تيك توك</strong></td>
+              <td><input type="text" id="tiktokLink" placeholder="https://www.tiktok.com/@..."></td>
+            </tr>
+          </table>
+          <button class="modal-btn primary" onclick="saveSiteSettings()">
+            <i class="fas fa-save"></i> حفظ الإعدادات
+          </button>
+        </div>
+
+        <div class="config-box">
+          <h3><i class="fas fa-info-circle"></i> معلومات التواصل الحالية</h3>
+          <div style="font-size:13px;color:var(--text-dim);line-height:1.8;">
+            <p><strong>الواتساب:</strong> <span id="current-wa">جاري التحميل...</span></p>
+            <p><strong>فيسبوك:</strong> <span id="current-fb">جاري التحميل...</span></p>
+            <p><strong>تيك توك:</strong> <span id="current-tt">جاري التحميل...</span></p>
+          </div>
         </div>
       </div>
 
@@ -515,11 +703,11 @@ body {
           </p>
           <div class="form-row">
             <label>Cloud Name</label>
-            <input type="text" id="cloudinaryCloudName" placeholder="مثال: dxhxxxxx">
+            <input type="text" id="cloudinaryCloudName" placeholder="مثال: cvzone">
           </div>
           <div class="form-row">
             <label>Upload Preset</label>
-            <input type="text" id="cloudinaryPreset" placeholder="مثال: cvzone_upload">
+            <input type="text" id="cloudinaryPreset" placeholder="مثال: uphjaqol">
           </div>
           <button class="modal-btn primary" style="width:auto;padding:10px 24px;margin-top:8px;" onclick="saveCloudinaryConfig()">
             <i class="fas fa-save"></i> حفظ الإعدادات
@@ -534,6 +722,14 @@ body {
           </div>
           <button class="modal-btn primary" style="width:auto;padding:10px 24px;margin-top:8px;" onclick="changePassword()">
             <i class="fas fa-key"></i> تحديث
+          </button>
+        </div>
+
+        <div class="config-box" style="border-color:var(--danger)">
+          <h3 style="color:var(--danger)"><i class="fas fa-exclamation-triangle"></i> منطقة الخطر</h3>
+          <p>حذف جميع البيانات سيؤدي إلى فقدان كل الأعمال والآراء والتعليقات. لا يمكن التراجع عن هذا الإجراء!</p>
+          <button class="modal-btn danger" style="width:auto;padding:10px 24px;margin-top:8px;" onclick="confirmClearAllData()">
+            <i class="fas fa-trash"></i> مسح جميع البيانات
           </button>
         </div>
       </div>
@@ -559,7 +755,7 @@ body {
       <input type="text" id="portfolioDesc" placeholder="مثال: سيرة ذاتية لمهندس برمجيات">
     </div>
     <div class="modal-actions">
-      <button class="modal-btn primary" onclick="savePortfolio()" id="portfolioSaveBtn">حفظ</button>
+      <button class="modal-btn primary" onclick="savePortfolio()">حفظ</button>
       <button class="modal-btn secondary" onclick="closeModal('portfolioModal')">إلغاء</button>
     </div>
   </div>
@@ -581,17 +777,28 @@ body {
       <label>التاريخ (اختياري)</label>
       <input type="text" id="testDate" placeholder="مثال: منذ يومين">
     </div>
-    <div class="form-row">
-      <label>صورة/screenshots (اختياري)</label>
-      <div class="file-upload-area" id="testUploadArea" onclick="document.getElementById('testFile').click()">
-        <i class="fas fa-cloud-upload-alt"></i>
-        <p>اضغط هنا لرفع صورة</p>
-        <input type="file" id="testFile" accept="image/*" style="display:none" onchange="handleTestFile(this)">
-      </div>
-    </div>
     <div class="modal-actions">
       <button class="modal-btn primary" onclick="saveTestimonial()">حفظ</button>
       <button class="modal-btn secondary" onclick="closeModal('testimonialModal')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ REPLY MODAL ═══ -->
+<div class="modal-overlay" id="replyModal">
+  <div class="modal">
+    <h3><i class="fas fa-reply" style="margin-left:8px"></i>إضافة رد</h3>
+    <div class="form-row">
+      <label>اسم المرسل (الاسم الافتراضي: CVZone)</label>
+      <input type="text" id="replyName" placeholder="CVZone">
+    </div>
+    <div class="form-row">
+      <label>نص الرد *</label>
+      <textarea id="replyText" placeholder="اكتب الرد هنا..."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn primary" onclick="submitCommentReply()">إرسال الرد</button>
+      <button class="modal-btn secondary" onclick="closeModal('replyModal')">إلغاء</button>
     </div>
   </div>
 </div>
@@ -608,15 +815,26 @@ body {
   </div>
 </div>
 
+<!-- ═══ CLEAR ALL DATA MODAL ═══ -->
+<div class="modal-overlay" id="clearDataModal">
+  <div class="modal" style="text-align:center;">
+    <h3><i class="fas fa-exclamation-triangle" style="color:var(--danger);margin-left:8px"></i>تحذير: مسح جميع البيانات</h3>
+    <p style="color:var(--text-dim);margin-bottom:18px;">هذا الإجراء سيحذف جميع الأعمال والآراء والتعليقات. لا يمكن التراجع عن هذا!</p>
+    <div class="modal-actions">
+      <button class="modal-btn danger" onclick="clearAllData()">نعم، احذف كل شيء</button>
+      <button class="modal-btn secondary" onclick="closeModal('clearDataModal')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
-<!-- Firebase SDKs -->
+<!-- Firebase SDK -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
-  getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc,
-  onSnapshot, query, orderBy
+  getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, onSnapshot, query, orderBy, increment
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // Firebase Config
@@ -635,7 +853,7 @@ const db = getFirestore(app);
 
 // Make Firestore available globally
 window.db = db;
-window.firestore = { collection, addDoc, getDocs, deleteDoc, doc, updateDoc, onSnapshot, query, orderBy };
+window.firestore = { collection, addDoc, getDocs, deleteDoc, doc, updateDoc, onSnapshot, query, orderBy, increment };
 
 // ─── AUTH ───
 const ADMIN_PASSWORD_KEY = 'cvzone_admin_pass';
@@ -647,7 +865,7 @@ window.login = function() {
   if (pass === saved) {
     document.getElementById('loginPage').style.display = 'none';
     document.getElementById('adminPage').classList.add('active');
-    localStorage.setItem('cvzone_logged_in', 'true');
+    sessionStorage.setItem('cvzone_logged_in', 'true');
     loadAllData();
   } else {
     document.getElementById('loginError').style.display = 'block';
@@ -656,13 +874,14 @@ window.login = function() {
 };
 
 window.logout = function() {
-  localStorage.removeItem('cvzone_logged_in');
+  sessionStorage.removeItem('cvzone_logged_in');
   document.getElementById('adminPage').classList.remove('active');
   document.getElementById('loginPage').style.display = 'flex';
+  document.getElementById('adminPassword').value = '';
 };
 
-// Auto login
-if (localStorage.getItem('cvzone_logged_in') === 'true') {
+// Auto login from sessionStorage
+if (sessionStorage.getItem('cvzone_logged_in') === 'true') {
   document.getElementById('loginPage').style.display = 'none';
   document.getElementById('adminPage').classList.add('active');
   loadAllData();
@@ -674,7 +893,11 @@ window.switchTab = function(tab) {
   document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
   document.querySelectorAll('.panel-section').forEach(el => el.classList.remove('active'));
   document.getElementById(`sec-${tab}`).classList.add('active');
+  
   if (tab === 'comments') loadComments();
+  if (tab === 'portfolio') loadPortfolio();
+  if (tab === 'testimonials') loadTestimonials();
+  if (tab === 'site-settings') loadSiteSettings();
 };
 
 // ─── MODALS ───
@@ -743,21 +966,6 @@ window.handlePortfolioFile = function(input) {
   }
 };
 
-// ─── TEST FILE ───
-let testFileData = null;
-window.handleTestFile = function(input) {
-  if (input.files[0]) {
-    testFileData = input.files[0];
-    const area = document.getElementById('testUploadArea');
-    area.classList.add('has-file');
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      area.innerHTML = `<img src="${e.target.result}"><p style="margin-top:8px;color:var(--success)">${input.files[0].name}</p><input type="file" id="testFile" accept="image/*" style="display:none" onchange="handleTestFile(this)">`;
-    };
-    reader.readAsDataURL(input.files[0]);
-  }
-};
-
 // ══════════════════════════════════════
 //  PORTFOLIO CRUD
 // ══════════════════════════════════════
@@ -772,15 +980,6 @@ window.openPortfolioModal = function(id = null) {
   portfolioFileData = null;
   document.getElementById('portfolioUploadArea').innerHTML = '<i class="fas fa-cloud-upload-alt"></i><p>اضغط هنا لرفع الصورة</p><input type="file" id="portfolioFile" accept="image/*" style="display:none" onchange="handlePortfolioFile(this)">';
   document.getElementById('portfolioUploadArea').classList.remove('has-file');
-
-  if (id) {
-    // Load existing data
-    const card = document.querySelector(`[data-port-id="${id}"]`);
-    if (card) {
-      document.getElementById('portfolioDesc').value = card.dataset.desc || '';
-    }
-  }
-
   openModal('portfolioModal');
 };
 
@@ -801,11 +1000,10 @@ window.savePortfolio = async function() {
     if (editingPortfolioId) {
       const updateData = { desc };
       if (imageUrl) updateData.imageUrl = imageUrl;
-      await window.firestore.updateDoc(window.db.collection('portfolio').doc(editingPortfolioId), updateData);
+      await window.firestore.updateDoc(window.firestore.doc(db, 'portfolio', editingPortfolioId), updateData);
       showToast('تم تحديث العمل بنجاح!');
     } else {
-      if (!imageUrl) return;
-      await window.firestore.addDoc(window.firestore.collection(window.db, 'portfolio'), {
+      await window.firestore.addDoc(window.firestore.collection(db, 'portfolio'), {
         imageUrl,
         desc,
         createdAt: Date.now(),
@@ -825,26 +1023,26 @@ function loadPortfolio() {
   grid.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i> جاري التحميل...</div>';
 
   window.firestore.onSnapshot(
-    window.firestore.query(window.firestore.collection(window.db, 'portfolio'), window.firestore.orderBy('order', 'desc')),
+    window.firestore.query(window.firestore.collection(db, 'portfolio'), window.firestore.orderBy('order', 'desc')),
     (snapshot) => {
       if (snapshot.empty) {
         grid.innerHTML = '<div class="empty-state"><i class="fas fa-images"></i><p>لا توجد أعمال بعد. أضف أول عمل!</p></div>';
+        document.getElementById('stat-portfolio').textContent = '0';
         return;
       }
       grid.innerHTML = '';
+      document.getElementById('stat-portfolio').textContent = snapshot.size;
       snapshot.forEach(docSnap => {
         const d = docSnap.data();
         const card = document.createElement('div');
         card.className = 'port-card';
-        card.dataset.portId = docSnap.id;
-        card.dataset.desc = d.desc || '';
         card.innerHTML = `
           <img src="${d.imageUrl}" class="port-card-img" alt="${d.desc || ''}" loading="lazy">
           <div class="port-card-body">
             <span style="font-size:12px;color:var(--text-dim);max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${d.desc || 'بدون وصف'}</span>
             <div class="port-card-actions">
               <button class="icon-btn" onclick="openPortfolioModal('${docSnap.id}')" title="تعديل"><i class="fas fa-edit"></i></button>
-              <button class="icon-btn danger" onclick="deletePortfolio('${docSnap.id}')" title="حذف"><i class="fas fa-trash"></i></button>
+              <button class="icon-btn danger" onclick="deleteItem('${docSnap.id}', 'portfolio')" title="حذف"><i class="fas fa-trash"></i></button>
             </div>
           </div>
         `;
@@ -853,36 +1051,6 @@ function loadPortfolio() {
     }
   );
 }
-
-let deleteTarget = null;
-let deleteType = null;
-
-window.deletePortfolio = function(id) {
-  deleteTarget = id;
-  deleteType = 'portfolio';
-  openModal('deleteModal');
-};
-
-window.confirmDelete = async function() {
-  try {
-    if (deleteType === 'portfolio') {
-      await window.firestore.deleteDoc(window.firestore.doc(window.db, 'portfolio', deleteTarget));
-      showToast('تم حذف العمل بنجاح!');
-      loadPortfolio();
-    } else if (deleteType === 'testimonial') {
-      await window.firestore.deleteDoc(window.firestore.doc(window.db, 'testimonials', deleteTarget));
-      showToast('تم حذف الرأي بنجاح!');
-      loadTestimonials();
-    } else if (deleteType === 'comment') {
-      await window.firestore.deleteDoc(window.firestore.doc(window.db, 'comments', deleteTarget));
-      showToast('تم حذف التعليق بنجاح!');
-      loadComments();
-    }
-  } catch (e) {
-    showToast('خطأ في الحذف: ' + e.message, true);
-  }
-  closeModal('deleteModal');
-};
 
 // ══════════════════════════════════════
 //  TESTIMONIALS CRUD
@@ -897,17 +1065,18 @@ window.openTestimonialModal = function(id = null) {
   document.getElementById('testName').value = '';
   document.getElementById('testText').value = '';
   document.getElementById('testDate').value = '';
-  testFileData = null;
-  document.getElementById('testUploadArea').innerHTML = '<i class="fas fa-cloud-upload-alt"></i><p>اضغط هنا لرفع صورة</p><input type="file" id="testFile" accept="image/*" style="display:none" onchange="handleTestFile(this)">';
-  document.getElementById('testUploadArea').classList.remove('has-file');
 
   if (id) {
-    const card = document.querySelector(`[data-test-id="${id}"]`);
-    if (card) {
-      document.getElementById('testName').value = card.dataset.name || '';
-      document.getElementById('testText').value = card.dataset.text || '';
-      document.getElementById('testDate').value = card.dataset.date || '';
-    }
+    // Load existing data
+    window.firestore.getDocs(window.firestore.collection(db, 'testimonials')).then(snapshot => {
+      const doc = snapshot.docs.find(d => d.id === id);
+      if (doc) {
+        const data = doc.data();
+        document.getElementById('testName').value = data.name || '';
+        document.getElementById('testText').value = data.text || '';
+        document.getElementById('testDate').value = data.date || '';
+      }
+    });
   }
 
   openModal('testimonialModal');
@@ -916,30 +1085,25 @@ window.openTestimonialModal = function(id = null) {
 window.saveTestimonial = async function() {
   const name = document.getElementById('testName').value.trim();
   const text = document.getElementById('testText').value.trim();
-  const date = document.getElementById('testDate').value.trim() || 'الآن';
+  const date = document.getElementById('testDate').value.trim();
 
   if (!name || !text) {
-    showToast('يجب إدخال الاسم والتعليق!', true);
+    showToast('يجب إدخال الاسم والرأي!', true);
     return;
-  }
-
-  let imageUrl = null;
-  if (testFileData) {
-    imageUrl = await uploadToCloudinary(testFileData);
-    if (!imageUrl) return;
   }
 
   try {
     if (editingTestimonialId) {
-      const updateData = { name, text, date };
-      if (imageUrl) updateData.imageUrl = imageUrl;
-      await window.firestore.updateDoc(window.firestore.doc(window.db, 'testimonials', editingTestimonialId), updateData);
+      await window.firestore.updateDoc(window.firestore.doc(db, 'testimonials', editingTestimonialId), {
+        name, text, date
+      });
       showToast('تم تحديث الرأي بنجاح!');
     } else {
-      await window.firestore.addDoc(window.firestore.collection(window.db, 'testimonials'), {
+      await window.firestore.addDoc(window.firestore.collection(db, 'testimonials'), {
         name, text, date,
-        imageUrl,
-        createdAt: Date.now()
+        createdAt: Date.now(),
+        order: Date.now(),
+        replies: []
       });
       showToast('تم إضافة الرأي بنجاح!');
     }
@@ -955,38 +1119,43 @@ function loadTestimonials() {
   grid.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i> جاري التحميل...</div>';
 
   window.firestore.onSnapshot(
-    window.firestore.query(window.firestore.collection(window.db, 'testimonials'), window.firestore.orderBy('createdAt', 'desc')),
+    window.firestore.query(window.firestore.collection(db, 'testimonials'), window.firestore.orderBy('order', 'desc')),
     (snapshot) => {
       if (snapshot.empty) {
         grid.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i><p>لا توجد آراء بعد. أضف أول رأي!</p></div>';
+        document.getElementById('stat-testimonials').textContent = '0';
         return;
       }
       grid.innerHTML = '';
+      document.getElementById('stat-testimonials').textContent = snapshot.size;
       snapshot.forEach(docSnap => {
         const d = docSnap.data();
-        const initials = d.name.split(' ').map(w => w[0]).join('').slice(0, 2);
         const card = document.createElement('div');
         card.className = 'test-card';
-        card.dataset.testId = docSnap.id;
-        card.dataset.name = d.name;
-        card.dataset.text = d.text;
-        card.dataset.date = d.date;
+        
+        let repliesHTML = '';
+        if (d.replies && d.replies.length > 0) {
+          repliesHTML = '<div style="margin-top:12px;">';
+          d.replies.forEach(reply => {
+            repliesHTML += `<div class="review-reply"><div class="review-reply-name">${reply.name}</div><div class="review-reply-text">${reply.text}</div></div>`;
+          });
+          repliesHTML += '</div>';
+        }
+        
         card.innerHTML = `
           <div class="test-card-header">
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div style="width:36px;height:36px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;font-size:12px">${initials}</div>
-              <div>
-                <div class="test-card-name">${d.name}</div>
-                <div style="font-size:11px;color:var(--text-muted)">${d.date}</div>
-              </div>
+            <div>
+              <div class="test-card-name">${d.name}</div>
+              <div style="font-size:11px;color:var(--text-muted)">${d.date || 'منذ قليل'}</div>
+            </div>
+            <div class="test-card-actions">
+              <button class="icon-btn" onclick="openTestimonialModal('${docSnap.id}')" title="تعديل"><i class="fas fa-edit"></i></button>
+              <button class="icon-btn danger" onclick="deleteItem('${docSnap.id}', 'testimonials')" title="حذف"><i class="fas fa-trash"></i></button>
             </div>
           </div>
           <div class="test-card-text">${d.text}</div>
-          ${d.imageUrl ? `<img src="${d.imageUrl}" style="width:100%;border-radius:8px;margin-bottom:10px;" loading="lazy">` : ''}
-          <div class="test-card-actions">
-            <button class="icon-btn" onclick="openTestimonialModal('${docSnap.id}')" title="تعديل"><i class="fas fa-edit"></i></button>
-            <button class="icon-btn danger" onclick="deleteTestimonial('${docSnap.id}')" title="حذف"><i class="fas fa-trash"></i></button>
-          </div>
+          ${repliesHTML}
+          <button class="reply-toggle-btn" onclick="openReplyModal('${docSnap.id}')" style="margin-top:8px;"><i class="fas fa-reply" style="margin-left:4px"></i> إضافة رد</button>
         `;
         grid.appendChild(card);
       });
@@ -994,91 +1163,197 @@ function loadTestimonials() {
   );
 }
 
-window.deleteTestimonial = function(id) {
-  deleteTarget = id;
-  deleteType = 'testimonial';
-  openModal('deleteModal');
-};
+// ══════════════════════════════════════
+//  COMMENTS
+// ══════════════════════════════════════
+let replyingToCommentId = null;
 
-// ══════════════════════════════════════
-//  COMMENTS (from Firestore)
-// ══════════════════════════════════════
 function loadComments() {
-  const list = document.getElementById('comments-list');
-  list.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i> جاري التحميل...</div>';
+  const container = document.getElementById('comments-list');
+  container.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i> جاري التحميل...</div>';
 
   window.firestore.onSnapshot(
-    window.firestore.query(window.firestore.collection(window.db, 'comments'), window.firestore.orderBy('time', 'desc')),
+    window.firestore.query(window.firestore.collection(db, 'comments'), window.firestore.orderBy('createdAt', 'desc')),
     (snapshot) => {
       if (snapshot.empty) {
-        list.innerHTML = '<div class="empty-state"><i class="fas fa-comments"></i><p>لا توجد تعليقات بعد</p></div>';
+        container.innerHTML = '<div class="empty-state"><i class="fas fa-comments"></i><p>لا توجد تعليقات بعد</p></div>';
+        document.getElementById('stat-comments').textContent = '0';
         return;
       }
-      list.innerHTML = '';
+      container.innerHTML = '';
+      document.getElementById('stat-comments').textContent = snapshot.size;
+      
+      // Load recent comments for dashboard
+      const recentList = document.getElementById('recent-comments-list');
+      if (recentList) {
+        recentList.innerHTML = '';
+        snapshot.docs.slice(0, 4).forEach(docSnap => {
+          const d = docSnap.data();
+          const item = document.createElement('div');
+          item.className = 'widget-item';
+          item.innerHTML = `<strong>${d.name}</strong><br><span style="font-size:12px">${d.text.substring(0, 50)}...</span>`;
+          recentList.appendChild(item);
+        });
+      }
+      
+      // Load all comments
       snapshot.forEach(docSnap => {
         const d = docSnap.data();
-        const time = new Date(d.time).toLocaleString('ar-EG');
         const card = document.createElement('div');
         card.className = 'comment-card';
+        
+        let repliesHTML = '';
+        if (d.replies && d.replies.length > 0) {
+          repliesHTML = '<div style="margin-top:10px;">';
+          d.replies.forEach(reply => {
+            repliesHTML += `<div class="review-reply"><div class="review-reply-name">${reply.name}</div><div class="review-reply-text">${reply.text}</div></div>`;
+          });
+          repliesHTML += '</div>';
+        }
+        
         card.innerHTML = `
           <div class="comment-card-header">
-            <span class="comment-card-name">${d.name}</span>
-            <span class="comment-card-time">${time}</span>
+            <div>
+              <div class="comment-card-name">${d.name}</div>
+              <div class="comment-card-time">${timeAgo(d.createdAt)}</div>
+            </div>
+            <button class="icon-btn danger" onclick="deleteItem('${docSnap.id}', 'comments')" title="حذف"><i class="fas fa-trash"></i></button>
           </div>
           <div class="comment-card-text">${d.text}</div>
-          ${d.replies && d.replies.length > 0 ? d.replies.map(r => `
-            <div class="review-reply">
-              <div class="review-reply-name">${r.name}</div>
-              <div class="review-reply-text">${r.text}</div>
-            </div>
-          `).join('') : ''}
+          ${repliesHTML}
           <div class="comment-card-actions">
-            <button class="icon-btn" onclick="addReply('${docSnap.id}')" title="رد"><i class="fas fa-reply"></i></button>
-            <button class="icon-btn danger" onclick="deleteComment('${docSnap.id}')" title="حذف"><i class="fas fa-trash"></i></button>
+            <button class="reply-toggle-btn" onclick="openReplyModal('${docSnap.id}')"><i class="fas fa-reply" style="margin-left:4px"></i> رد</button>
           </div>
         `;
-        list.appendChild(card);
+        container.appendChild(card);
       });
     }
   );
 }
 
-window.addReply = function(commentId) {
-  const replyName = prompt('اسمك:');
-  if (!replyName) return;
-  const replyText = prompt('الرد:');
-  if (!replyText) return;
-
-  const commentRef = window.firestore.doc(window.db, 'comments', commentId);
-  window.firestore.getDocs(window.firestore.collection(window.db, 'comments')).then(() => {
-    // Simple approach: just add reply
-    const reply = { name: replyName, text: replyText };
-    window.firestore.updateDoc(commentRef, {
-      replies: window.firestore.arrayUnion ? 
-        window.firestore.arrayUnion(reply) : 
-        undefined
-    }).catch(() => {
-      // Fallback: we need to read then update
-      window.firestore.getDocs(window.firestore.query(window.firestore.collection(window.db, 'comments'))).then(snap => {
-        snap.forEach(ds => {
-          if (ds.id === commentId) {
-            const data = ds.data();
-            const replies = data.replies || [];
-            replies.push(reply);
-            window.firestore.updateDoc(commentRef, { replies });
-            showToast('تم إضافة الرد!');
-            loadComments();
-          }
-        });
-      });
-    });
-  });
+window.openReplyModal = function(id) {
+  replyingToCommentId = id;
+  document.getElementById('replyName').value = 'CVZone';
+  document.getElementById('replyText').value = '';
+  openModal('replyModal');
 };
 
-window.deleteComment = function(id) {
+window.submitCommentReply = async function() {
+  const name = document.getElementById('replyName').value.trim() || 'CVZone';
+  const text = document.getElementById('replyText').value.trim();
+  
+  if (!text) {
+    showToast('يجب إدخال نص الرد!', true);
+    return;
+  }
+  
+  try {
+    const docRef = window.firestore.doc(db, replyingToCommentId.startsWith('test-') ? 'testimonials' : 'comments', replyingToCommentId.replace('test-', ''));
+    const docSnap = await window.firestore.getDocs(window.firestore.collection(db, replyingToCommentId.startsWith('test-') ? 'testimonials' : 'comments'));
+    const comment = docSnap.docs.find(d => d.id === replyingToCommentId.replace('test-', ''));
+    
+    if (comment) {
+      const data = comment.data();
+      const replies = data.replies || [];
+      replies.push({ name, text });
+      await window.firestore.updateDoc(docRef, { replies });
+      showToast('تم إضافة الرد بنجاح!');
+      closeModal('replyModal');
+      loadComments();
+    }
+  } catch (e) {
+    showToast('خطأ: ' + e.message, true);
+  }
+};
+
+// ══════════════════════════════════════
+//  SITE SETTINGS
+// ══════════════════════════════════════
+function loadSiteSettings() {
+  window.firestore.getDocs(window.firestore.collection(db, 'site_settings')).then(snapshot => {
+    if (!snapshot.empty) {
+      const data = snapshot.docs[0].data();
+      document.getElementById('heroTitle').value = data.heroTitle || '';
+      document.getElementById('clientsCount').value = data.clientsCount || '1500';
+      document.getElementById('acceptanceRate').value = data.acceptanceRate || '98';
+      document.getElementById('executionTime').value = data.executionTime || '24h';
+      document.getElementById('whatsappNumber').value = data.whatsappNumber || '201092977623';
+      document.getElementById('facebookLink').value = data.facebookLink || '';
+      document.getElementById('tiktokLink').value = data.tiktokLink || '';
+      
+      document.getElementById('current-wa').textContent = data.whatsappNumber || 'غير محدد';
+      document.getElementById('current-fb').textContent = data.facebookLink || 'غير محدد';
+      document.getElementById('current-tt').textContent = data.tiktokLink || 'غير محدد';
+    }
+  });
+}
+
+window.saveSiteSettings = async function() {
+  try {
+    const settingsRef = window.firestore.doc(db, 'site_settings', 'main');
+    await window.firestore.updateDoc(settingsRef, {
+      heroTitle: document.getElementById('heroTitle').value,
+      clientsCount: document.getElementById('clientsCount').value,
+      acceptanceRate: document.getElementById('acceptanceRate').value,
+      executionTime: document.getElementById('executionTime').value,
+      whatsappNumber: document.getElementById('whatsappNumber').value,
+      facebookLink: document.getElementById('facebookLink').value,
+      tiktokLink: document.getElementById('tiktokLink').value
+    });
+    showToast('تم حفظ الإعدادات بنجاح!');
+    loadSiteSettings();
+  } catch (e) {
+    showToast('خطأ: ' + e.message, true);
+  }
+};
+
+// ══════════════════════════════════════
+//  DELETE & CLEAR
+// ══════════════════════════════════════
+let deleteTarget = null;
+let deleteType = null;
+
+window.deleteItem = function(id, type) {
   deleteTarget = id;
-  deleteType = 'comment';
+  deleteType = type;
   openModal('deleteModal');
+};
+
+window.confirmDelete = async function() {
+  try {
+    await window.firestore.deleteDoc(window.firestore.doc(db, deleteType, deleteTarget));
+    showToast('تم الحذف بنجاح!');
+    closeModal('deleteModal');
+    
+    if (deleteType === 'portfolio') loadPortfolio();
+    if (deleteType === 'testimonials') loadTestimonials();
+    if (deleteType === 'comments') loadComments();
+  } catch (e) {
+    showToast('خطأ: ' + e.message, true);
+  }
+};
+
+window.confirmClearAllData = function() {
+  openModal('clearDataModal');
+};
+
+window.clearAllData = async function() {
+  try {
+    const collections = ['portfolio', 'testimonials', 'comments'];
+    for (const collName of collections) {
+      const snapshot = await window.firestore.getDocs(window.firestore.collection(db, collName));
+      for (const doc of snapshot.docs) {
+        await window.firestore.deleteDoc(window.firestore.doc(db, collName, doc.id));
+      }
+    }
+    showToast('تم مسح جميع البيانات!');
+    closeModal('clearDataModal');
+    loadPortfolio();
+    loadTestimonials();
+    loadComments();
+  } catch (e) {
+    showToast('خطأ: ' + e.message, true);
+  }
 };
 
 // ══════════════════════════════════════
@@ -1087,10 +1362,12 @@ window.deleteComment = function(id) {
 window.saveCloudinaryConfig = function() {
   const cloudName = document.getElementById('cloudinaryCloudName').value.trim();
   const preset = document.getElementById('cloudinaryPreset').value.trim();
+  
   if (!cloudName || !preset) {
-    showToast('يجب ملء كل الحقول!', true);
+    showToast('يجب إدخال Cloud Name و Upload Preset!', true);
     return;
   }
+  
   localStorage.setItem('cvzone_cloud_name', cloudName);
   localStorage.setItem('cvzone_preset', preset);
   showToast('تم حفظ إعدادات Cloudinary!');
@@ -1098,32 +1375,47 @@ window.saveCloudinaryConfig = function() {
 
 window.changePassword = function() {
   const newPass = document.getElementById('newPassword').value.trim();
-  if (!newPass || newPass.length < 4) {
-    showToast('كلمة المرور يجب أن تكون 4 أحرف على الأقل!', true);
+  
+  if (!newPass) {
+    showToast('يجب إدخال كلمة المرور الجديدة!', true);
     return;
   }
+  
   localStorage.setItem(ADMIN_PASSWORD_KEY, newPass);
+  showToast('تم تحديث كلمة المرور!');
   document.getElementById('newPassword').value = '';
-  showToast('تم تغيير كلمة المرور!');
 };
 
-// Load Cloudinary config
+// ─── LOAD CLOUDINARY CONFIG ───
 function loadCloudinaryConfig() {
-  const cn = localStorage.getItem('cvzone_cloud_name');
-  const pr = localStorage.getItem('cvzone_preset');
-  if (cn) document.getElementById('cloudinaryCloudName').value = cn;
-  if (pr) document.getElementById('cloudinaryPreset').value = pr;
+  const cloudName = localStorage.getItem('cvzone_cloud_name');
+  const preset = localStorage.getItem('cvzone_preset');
+  
+  if (cloudName) document.getElementById('cloudinaryCloudName').value = cloudName;
+  if (preset) document.getElementById('cloudinaryPreset').value = preset;
 }
 
-// ─── LOAD ALL ───
+// ─── UTILITY FUNCTIONS ───
+function timeAgo(timestamp) {
+  const diff = Math.floor((Date.now() - timestamp) / 1000);
+  if (diff < 60) return 'الآن';
+  if (diff < 3600) return `منذ ${Math.floor(diff/60)} دقيقة`;
+  if (diff < 86400) return `منذ ${Math.floor(diff/3600)} ساعة`;
+  if (diff < 604800) return `منذ ${Math.floor(diff/86400)} يوم`;
+  return `منذ ${Math.floor(diff/604800)} أسبوع`;
+}
+
+// ─── LOAD ALL DATA ───
 function loadAllData() {
   loadPortfolio();
   loadTestimonials();
+  loadComments();
+  loadSiteSettings();
   loadCloudinaryConfig();
 }
 
-// Init: load Firestore comments also from localStorage fallback
-// The main site will write comments to both localStorage AND Firestore
+// Initialize
+loadAllData();
 </script>
 
 </body>

@@ -466,10 +466,10 @@ nav.scrolled {
 }
 .comment-input:focus { border-color: var(--gold); }
 .comment-input::placeholder { color: rgba(148,163,184,0.45); }
-textarea.comment-input { resize: none; height: 70px; }
+textarea.comment-input { resize: vertical; min-height: 50px; }
 
 .comment-submit-btn {
-  padding: 10px 22px;
+  padding: 10px 20px;
   background: var(--gold);
   color: #000;
   border: none;
@@ -477,28 +477,33 @@ textarea.comment-input { resize: none; height: 70px; }
   font-weight: 700;
   font-size: 13px;
   cursor: pointer;
-  transition: 0.3s;
   font-family: inherit;
-  align-self: flex-end;
-  white-space: nowrap;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
 }
-.comment-submit-btn:hover { box-shadow: 0 6px 18px rgba(212,175,55,0.3); transform: translateY(-2px); }
+.comment-submit-btn:hover { box-shadow: 0 6px 20px rgba(212,175,55,0.3); }
 
-/* تعليقات المستخدمين */
-#user-comments { max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; margin-top: 14px; }
+/* User Comment Box */
 .user-comment-box {
-  background: var(--glass-bg);
-  backdrop-filter: blur(14px);
+  background: rgba(5,7,10,0.5);
   border: 1px solid var(--border);
-  padding: 18px 22px;
-  border-radius: 14px;
-  animation: fadeIn 0.4s ease;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
 }
-@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-
-.uc-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-.uc-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--gold); display: flex; align-items: center; justify-content: center; color:#000; font-size:12px; font-weight:700; flex-shrink:0; }
-.uc-name { font-size: 13px; font-weight: 700; }
+.uc-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.uc-avatar {
+  width: 32px; height: 32px;
+  background: var(--gold);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #000; font-weight: 700; font-size: 11px;
+  flex-shrink: 0;
+}
+.uc-name { font-weight: 700; font-size: 13px; }
 .uc-time { font-size: 11px; color: var(--text-dim); margin-right: auto; }
 .uc-text { font-size: 13px; color: #c4d2e6; line-height: 1.6; margin-bottom: 10px; }
 
@@ -770,9 +775,9 @@ footer {
   <h1 class="hero-title" data-aos="fade-up">سيرتك الذاتية هي <span>استثمارك الأول</span></h1>
   <p class="hero-sub" data-aos="fade-up" data-aos-delay="100">نحن لا نصمم مجرد أوراق، بل نصيغ قصة نجاحك المهني بأسلوب علمي يضمن لفت انتباه مسؤولي التوظيف والوصول للأيدي المحررة.</p>
   <div class="trust-bar" data-aos="fade-up" data-aos-delay="200">
-    <div class="trust-item"><span class="trust-num" data-count="1500">1500+</span><span class="trust-label">عميل ناجح</span></div>
-    <div class="trust-item"><span class="trust-num">98%</span><span class="trust-label">معدل قبول</span></div>
-    <div class="trust-item"><span class="trust-num">24h</span><span class="trust-label">وقت التنفيذ</span></div>
+    <div class="trust-item"><span class="trust-num" id="clientsCount">1500+</span><span class="trust-label">عميل ناجح</span></div>
+    <div class="trust-item"><span class="trust-num" id="acceptanceRate">98%</span><span class="trust-label">معدل قبول</span></div>
+    <div class="trust-item"><span class="trust-num" id="executionTime">24h</span><span class="trust-label">وقت التنفيذ</span></div>
   </div>
   <a href="#order" class="hero-cta" data-aos="fade-up" data-aos-delay="300">
     <i class="fas fa-file-alt"></i> ابدأ سيرتك الذاتية الآن
@@ -804,50 +809,8 @@ footer {
 <!-- ═══ PORTFOLIO ═══ -->
 <section id="portfolio">
   <h2 class="section-title" data-aos="fade-up">بعض من <span>أعمالنا</span></h2>
-  <div class="portfolio-grid">
-
-    <div class="cv-card" data-aos="fade-up" data-aos-delay="0" onclick="openLightbox(this)">
-      <div class="cv-img-wrap">
-        <img src="images/cv1.png" alt="نموذج سيرة ذاتية احترافي - CVZone" draggable="false">
-        <div class="cv-watermark"><span class="cv-watermark-text">CVZone</span></div>
-      </div>
-    </div>
-
-    <div class="cv-card" data-aos="fade-up" data-aos-delay="100" onclick="openLightbox(this)">
-      <div class="cv-img-wrap">
-        <img src="images/cv2.png" alt="نموذج سيرة ذاتية احترافي - CVZone" draggable="false">
-        <div class="cv-watermark"><span class="cv-watermark-text">CVZone</span></div>
-      </div>
-    </div>
-
-    <div class="cv-card" data-aos="fade-up" data-aos-delay="200" onclick="openLightbox(this)">
-      <div class="cv-img-wrap">
-        <img src="images/cv3.png" alt="نموذج سيرة ذاتية احترافي - CVZone" draggable="false">
-        <div class="cv-watermark"><span class="cv-watermark-text">CVZone</span></div>
-      </div>
-    </div>
-
-    <div class="cv-card" data-aos="fade-up" data-aos-delay="300" onclick="openLightbox(this)">
-      <div class="cv-img-wrap">
-        <img src="images/cv4.png" alt="نموذج سيرة ذاتية احترافي - CVZone" draggable="false">
-        <div class="cv-watermark"><span class="cv-watermark-text">CVZone</span></div>
-      </div>
-    </div>
-
-    <div class="cv-card" data-aos="fade-up" data-aos-delay="400" onclick="openLightbox(this)">
-      <div class="cv-img-wrap">
-        <img src="images/cv5.png" alt="نموذج سيرة ذاتية احترافي - CVZone" draggable="false">
-        <div class="cv-watermark"><span class="cv-watermark-text">CVZone</span></div>
-      </div>
-    </div>
-
-    <div class="cv-card" data-aos="fade-up" data-aos-delay="500" onclick="openLightbox(this)">
-      <div class="cv-img-wrap">
-        <img src="images/cv6.png" alt="نموذج سيرة ذاتية احترافي - CVZone" draggable="false">
-        <div class="cv-watermark"><span class="cv-watermark-text">CVZone</span></div>
-      </div>
-    </div>
-
+  <div class="portfolio-grid" id="portfolioGrid">
+    <!-- Loaded dynamically from Firebase -->
   </div>
 </section>
 
@@ -862,49 +825,8 @@ footer {
   <div class="reviews-container">
     <h2 class="section-title" data-aos="fade-up" style="margin-bottom:24px;">آراء <span>عملاء حقيقيين</span></h2>
 
-    <div class="review-box" data-aos="fade-up" data-aos-delay="0">
-      <div class="review-header">
-        <div class="user-info">
-          <div class="user-avatar">أ.ح</div>
-          <span class="user-name">أحمد حسن</span>
-        </div>
-        <span class="review-date">منذ يومين</span>
-      </div>
-      <div class="review-stars">
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-      </div>
-      <p class="review-text">بصراحة الشغل مرتب جداً، السيرة الذاتية فرقت معايا كتير في المقابلات. شكراً ليكم على الذوق في التعامل.</p>
-      <div class="reply-chain">
-        <div class="reply"><b>سارة محمود:</b> فعلاً والله أنا كمان عملت عندهم والـ HR سألني مين اللي منسق الـ CV ده.</div>
-        <div class="reply"><b>CVZone:</b> تسلم يا أستاذ أحمد، ده واجبنا وبالتوفيق في وظيفتك الجديدة.</div>
-      </div>
-    </div>
-
-    <div class="review-box" data-aos="fade-up" data-aos-delay="100">
-      <div class="review-header">
-        <div class="user-info">
-          <div class="user-avatar">م.س</div>
-          <span class="user-name">منى سامي</span>
-        </div>
-        <span class="review-date">منذ أسبوع</span>
-      </div>
-      <div class="review-stars">
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-      </div>
-      <p class="review-text">كنت خايفة من موضوع الـ ATS بس الحمد لله الملف اتقبل في أكتر من شركة كبيرة. التعامل كان سريع جداً.</p>
-      <div class="reply-chain">
-        <div class="reply"><b>خالد حسن:</b> منى، خدوا وقت قد إيه عشان يخلصوه؟</div>
-        <div class="reply"><b>منى سامي:</b> تقريباً يوم واحد وكان الملف جاهز يا خالد.</div>
-      </div>
-    </div>
+    <!-- Loaded dynamically from Firebase -->
+    <div id="testimonialsList"></div>
   </div>
 
   <!-- تعليقات المستخدمين الديناميكية -->
@@ -1058,6 +980,281 @@ footer {
 <!-- AOS Library -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore, collection, getDocs, addDoc, onSnapshot, query, orderBy, increment, updateDoc, doc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// Firebase Config
+const firebaseConfig = {
+  apiKey: "AIzaSyCDRuFbCBtiX6MLzBeXEIDyMLMybkGwEYc",
+  authDomain: "cvzone-app-9a41b.firebaseapp.com",
+  projectId: "cvzone-app-9a41b",
+  storageBucket: "cvzone-app-9a41b.firebasestorage.app",
+  messagingSenderId: "126192034228",
+  appId: "1:126192034228:web:201abc488c6f20835bd2e1",
+  measurementId: "G-BBPL0W5Q6L"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Make Firebase available globally
+window.db = db;
+window.firestore = { collection, getDocs, addDoc, onSnapshot, query, orderBy, updateDoc, doc, increment };
+
+// ─── LOAD PORTFOLIO ───
+async function loadPortfolio() {
+  const grid = document.getElementById('portfolioGrid');
+  grid.innerHTML = '';
+  
+  try {
+    const q = window.firestore.query(
+      window.firestore.collection(db, 'portfolio'),
+      window.firestore.orderBy('order', 'desc')
+    );
+    
+    window.firestore.onSnapshot(q, (snapshot) => {
+      grid.innerHTML = '';
+      if (snapshot.empty) {
+        grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-dim)">جاري تحميل الأعمال...</p>';
+        return;
+      }
+      
+      snapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        const card = document.createElement('div');
+        card.className = 'cv-card';
+        card.onclick = () => openLightbox(card);
+        card.innerHTML = `
+          <div class="cv-img-wrap">
+            <img src="${data.imageUrl}" alt="${data.desc || 'نموذج سيرة ذاتية'}" draggable="false">
+            <div class="cv-watermark"><span class="cv-watermark-text">CVZone</span></div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    });
+  } catch (e) {
+    console.error('Error loading portfolio:', e);
+  }
+}
+
+// ─── LOAD TESTIMONIALS ───
+async function loadTestimonials() {
+  const container = document.getElementById('testimonialsList');
+  container.innerHTML = '';
+  
+  try {
+    const q = window.firestore.query(
+      window.firestore.collection(db, 'testimonials'),
+      window.firestore.orderBy('order', 'desc')
+    );
+    
+    window.firestore.onSnapshot(q, (snapshot) => {
+      container.innerHTML = '';
+      if (snapshot.empty) return;
+      
+      snapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        const card = document.createElement('div');
+        card.className = 'review-box';
+        card.setAttribute('data-aos', 'fade-up');
+        
+        let repliesHTML = '';
+        if (data.replies && data.replies.length > 0) {
+          repliesHTML = '<div class="reply-chain">';
+          data.replies.forEach(reply => {
+            repliesHTML += `<div class="reply"><b>${reply.name}:</b> ${reply.text}</div>`;
+          });
+          repliesHTML += '</div>';
+        }
+        
+        card.innerHTML = `
+          <div class="review-header">
+            <div class="user-info">
+              <div class="user-avatar">${getInitials(data.name)}</div>
+              <span class="user-name">${data.name}</span>
+            </div>
+            <span class="review-date">${data.date || 'منذ قليل'}</span>
+          </div>
+          <div class="review-stars">${'<i class="fas fa-star"></i>'.repeat(5)}</div>
+          <p class="review-text">${data.text}</p>
+          ${repliesHTML}
+        `;
+        container.appendChild(card);
+      });
+      
+      AOS.refresh();
+    });
+  } catch (e) {
+    console.error('Error loading testimonials:', e);
+  }
+}
+
+// ─── LOAD COMMENTS ───
+async function loadComments() {
+  const container = document.getElementById('user-comments');
+  container.innerHTML = '';
+  
+  try {
+    const q = window.firestore.query(
+      window.firestore.collection(db, 'comments'),
+      window.firestore.orderBy('createdAt', 'desc')
+    );
+    
+    window.firestore.onSnapshot(q, (snapshot) => {
+      container.innerHTML = '';
+      if (snapshot.empty) return;
+      
+      snapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        const card = document.createElement('div');
+        card.className = 'user-comment-box';
+        
+        let repliesHTML = '';
+        if (data.replies && data.replies.length > 0) {
+          repliesHTML = '<div class="replies-list">';
+          data.replies.forEach(reply => {
+            repliesHTML += `<div class="reply-item"><b>${reply.name}:</b> ${reply.text}</div>`;
+          });
+          repliesHTML += '</div>';
+        }
+        
+        card.innerHTML = `
+          <div class="uc-header">
+            <div class="uc-avatar">${getInitials(data.name)}</div>
+            <span class="uc-name">${data.name}</span>
+            <span class="uc-time">${timeAgo(data.createdAt)}</span>
+          </div>
+          <p class="uc-text">${data.text}</p>
+          <button class="reply-toggle-btn" onclick="toggleReply('${docSnap.id}')"><i class="fas fa-reply" style="margin-left:4px"></i> رد</button>
+          ${repliesHTML}
+          <div class="reply-form" id="reply-form-${docSnap.id}">
+            <input type="text" id="reply-name-${docSnap.id}" placeholder="اسمك">
+            <input type="text" id="reply-text-${docSnap.id}" placeholder="اكتب ردك...">
+            <button onclick="submitReply('${docSnap.id}')">إرسال</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    });
+  } catch (e) {
+    console.error('Error loading comments:', e);
+  }
+}
+
+// ─── LOAD SITE SETTINGS ───
+async function loadSiteSettings() {
+  try {
+    const docRef = window.firestore.doc(db, 'site_settings', 'main');
+    window.firestore.onSnapshot(docRef, (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        if (data.clientsCount) document.getElementById('clientsCount').textContent = data.clientsCount + '+';
+        if (data.acceptanceRate) document.getElementById('acceptanceRate').textContent = data.acceptanceRate + '%';
+        if (data.executionTime) document.getElementById('executionTime').textContent = data.executionTime;
+      }
+    });
+  } catch (e) {
+    console.error('Error loading site settings:', e);
+  }
+}
+
+// ─── INCREMENT VISITS ───
+async function incrementVisits() {
+  try {
+    const docRef = window.firestore.doc(db, 'visits', 'counter');
+    await window.firestore.updateDoc(docRef, {
+      count: window.firestore.increment(1)
+    });
+  } catch (e) {
+    console.error('Error incrementing visits:', e);
+  }
+}
+
+// ─── UTILITY FUNCTIONS ───
+function getInitials(name) {
+  const parts = name.trim().split(' ');
+  if (parts.length >= 2) return parts[0][0] + '.' + parts[1][0];
+  return name.slice(0, 2).toUpperCase();
+}
+
+function timeAgo(timestamp) {
+  const diff = Math.floor((Date.now() - timestamp) / 1000);
+  if (diff < 60) return 'الآن';
+  if (diff < 3600) return `منذ ${Math.floor(diff/60)} دقيقة`;
+  if (diff < 86400) return `منذ ${Math.floor(diff/3600)} ساعة`;
+  if (diff < 604800) return `منذ ${Math.floor(diff/86400)} يوم`;
+  return `منذ ${Math.floor(diff/604800)} أسبوع`;
+}
+
+window.toggleReply = function(id) {
+  const form = document.getElementById(`reply-form-${id}`);
+  form.classList.toggle('open');
+};
+
+window.submitReply = async function(commentId) {
+  const name = document.getElementById(`reply-name-${commentId}`).value.trim();
+  const text = document.getElementById(`reply-text-${commentId}`).value.trim();
+  
+  if (!name || !text) return;
+  
+  try {
+    const docRef = window.firestore.doc(db, 'comments', commentId);
+    const docSnap = await window.firestore.getDocs(window.firestore.collection(db, 'comments'));
+    const comment = docSnap.docs.find(d => d.id === commentId);
+    
+    if (comment) {
+      const data = comment.data();
+      const replies = data.replies || [];
+      replies.push({ name, text });
+      await window.firestore.updateDoc(docRef, { replies });
+      
+      document.getElementById(`reply-name-${commentId}`).value = '';
+      document.getElementById(`reply-text-${commentId}`).value = '';
+      document.getElementById(`reply-form-${commentId}`).classList.remove('open');
+    }
+  } catch (e) {
+    console.error('Error submitting reply:', e);
+  }
+};
+
+window.addComment = async function() {
+  const name = document.getElementById('commenter-name').value.trim();
+  const text = document.getElementById('commenter-text').value.trim();
+  
+  if (!name || !text) {
+    alert('من فضلك أدخل اسمك والتعليق');
+    return;
+  }
+  
+  try {
+    await window.firestore.addDoc(window.firestore.collection(db, 'comments'), {
+      name,
+      text,
+      createdAt: Date.now(),
+      replies: []
+    });
+    
+    document.getElementById('commenter-name').value = '';
+    document.getElementById('commenter-text').value = '';
+  } catch (e) {
+    console.error('Error adding comment:', e);
+    alert('حدث خطأ في إضافة التعليق');
+  }
+};
+
+// Initialize
+loadPortfolio();
+loadTestimonials();
+loadComments();
+loadSiteSettings();
+incrementVisits();
+</script>
+
 <script>
 /* ─── Initialize AOS ─── */
 AOS.init({
@@ -1175,83 +1372,6 @@ ${notes  ? '📝 *ملاحظات:* ' + notes   : ''}
 const shakeStyle = document.createElement('style');
 shakeStyle.textContent = `@keyframes shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-6px)} 40%,80%{transform:translateX(6px)} }`;
 document.head.appendChild(shakeStyle);
-
-/* ─── Comments System (with localStorage) ─── */
-let comments = JSON.parse(localStorage.getItem('cvzone_comments') || '[]');
-
-function saveComments() {
-  localStorage.setItem('cvzone_comments', JSON.stringify(comments));
-}
-
-function timeAgo(date) {
-  const diff = Math.floor((Date.now() - date) / 1000);
-  if (diff < 60) return 'الآن';
-  if (diff < 3600) return `منذ ${Math.floor(diff/60)} دقيقة`;
-  if (diff < 86400) return `منذ ${Math.floor(diff/3600)} ساعة`;
-  return `منذ ${Math.floor(diff/86400)} يوم`;
-}
-
-function getInitials(name) {
-  const parts = name.trim().split(' ');
-  if (parts.length >= 2) return parts[0][0] + '.' + parts[1][0];
-  return name.slice(0,2);
-}
-
-function renderComments() {
-  const container = document.getElementById('user-comments');
-  container.innerHTML = '';
-  comments.forEach((c, i) => {
-    const div = document.createElement('div');
-    div.className = 'user-comment-box';
-    div.innerHTML = `
-      <div class="uc-header">
-        <div class="uc-avatar">${getInitials(c.name)}</div>
-        <span class="uc-name">${c.name}</span>
-        <span class="uc-time">${timeAgo(c.time)}</span>
-      </div>
-      <p class="uc-text">${c.text}</p>
-      <button class="reply-toggle-btn" onclick="toggleReply(${i})"><i class="fas fa-reply" style="margin-left:4px"></i> رد</button>
-      ${c.replies.length > 0 ? `
-        <div class="replies-list">
-          ${c.replies.map(r => `<div class="reply-item"><b>${r.name}:</b> ${r.text}</div>`).join('')}
-        </div>` : ''}
-      <div class="reply-form" id="reply-form-${i}">
-        <input type="text" id="reply-name-${i}" placeholder="اسمك">
-        <input type="text" id="reply-text-${i}" placeholder="ردك هنا..." onkeydown="if(event.key==='Enter') submitReply(${i})">
-        <button onclick="submitReply(${i})">إرسال</button>
-      </div>
-    `;
-    container.appendChild(div);
-  });
-}
-
-function addComment() {
-  const name = document.getElementById('commenter-name').value.trim();
-  const text = document.getElementById('commenter-text').value.trim();
-  if (!name || !text) { alert('من فضلك أدخل اسمك والتعليق'); return; }
-  comments.unshift({ name, text, time: Date.now(), replies: [] });
-  saveComments();
-  document.getElementById('commenter-name').value = '';
-  document.getElementById('commenter-text').value = '';
-  renderComments();
-}
-
-function toggleReply(i) {
-  const f = document.getElementById(`reply-form-${i}`);
-  f.classList.toggle('open');
-}
-
-function submitReply(i) {
-  const name = document.getElementById(`reply-name-${i}`).value.trim();
-  const text = document.getElementById(`reply-text-${i}`).value.trim();
-  if (!name || !text) return;
-  comments[i].replies.push({ name, text });
-  saveComments();
-  renderComments();
-}
-
-// Initial render
-renderComments();
 </script>
 
 </body>

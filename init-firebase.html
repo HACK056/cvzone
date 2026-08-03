@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CVZone — تهيئة البيانات</title>
+<style>
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #0a0e1a 0%, #111827 100%);
+  color: #f8fafc;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.container {
+  background: #111827;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 600px;
+  text-align: center;
+}
+h1 { color: #d4af37; margin-bottom: 20px; font-size: 24px; }
+p { color: #94a3b8; margin-bottom: 16px; line-height: 1.6; }
+.status { margin: 20px 0; padding: 20px; background: rgba(4,6,10,0.7); border-radius: 12px; }
+.status.success { border: 1px solid #22c55e; }
+.status.error { border: 1px solid #ef4444; }
+.status.loading { border: 1px solid #d4af37; }
+button {
+  padding: 12px 32px;
+  background: #d4af37;
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s;
+  margin: 10px;
+}
+button:hover { box-shadow: 0 8px 25px rgba(212,175,55,0.3); }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+.log { text-align: left; background: rgba(4,6,10,0.9); padding: 16px; border-radius: 8px; margin-top: 20px; max-height: 300px; overflow-y: auto; font-size: 12px; color: #94a3b8; font-family: monospace; }
+.log-item { margin: 4px 0; }
+.log-item.success { color: #22c55e; }
+.log-item.error { color: #ef4444; }
+.log-item.info { color: #d4af37; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🚀 تهيئة بيانات CVZone</h1>
+  <p>هذه الصفحة تقوم بتهيئة قاعدة البيانات بالبيانات الافتراضية</p>
+  
+  <div class="status loading" id="status">
+    <p id="statusText">جاري الاتصال بـ Firebase...</p>
+  </div>
+  
+  <button onclick="initializeData()" id="initBtn">بدء التهيئة</button>
+  <button onclick="location.href='admin.html'">الذهاب إلى لوحة التحكم</button>
+  
+  <div class="log" id="log"></div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore, collection, getDocs, setDoc, doc, addDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCDRuFbCBtiX6MLzBeXEIDyMLMybkGwEYc",
+  authDomain: "cvzone-app-9a41b.firebaseapp.com",
+  projectId: "cvzone-app-9a41b",
+  storageBucket: "cvzone-app-9a41b.firebasestorage.app",
+  messagingSenderId: "126192034228",
+  appId: "1:126192034228:web:201abc488c6f20835bd2e1",
+  measurementId: "G-BBPL0W5Q6L"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+function log(msg, type = 'info') {
+  const logEl = document.getElementById('log');
+  const item = document.createElement('div');
+  item.className = `log-item ${type}`;
+  item.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+  logEl.appendChild(item);
+  logEl.scrollTop = logEl.scrollHeight;
+}
+
+function updateStatus(msg, type = 'loading') {
+  document.getElementById('statusText').textContent = msg;
+  document.getElementById('status').className = `status ${type}`;
+}
+
+window.initializeData = async function() {
+  document.getElementById('initBtn').disabled = true;
+  
+  try {
+    updateStatus('جاري التهيئة...', 'loading');
+    
+    // 1. Initialize site_settings
+    log('جاري إنشاء إعدادات الموقع...', 'info');
+    const siteSettingsRef = doc(db, 'site_settings', 'main');
+    await setDoc(siteSettingsRef, {
+      heroTitle: 'سيرتك الذاتية هي استثمارك الأول',
+      clientsCount: '1500',
+      acceptanceRate: '98',
+      executionTime: '24h',
+      whatsappNumber: '201092977623',
+      facebookLink: 'https://www.facebook.com/share/1JFEcs6nKt/',
+      tiktokLink: 'https://www.tiktok.com/@cvzone1?_r=1&_t=ZS-98YEcTV0L80',
+      adminPassword: 'cvzone2024'
+    });
+    log('✓ تم إنشاء إعدادات الموقع', 'success');
+    
+    // 2. Initialize visits counter
+    log('جاري إنشاء عداد الزيارات...', 'info');
+    const visitsRef = doc(db, 'visits', 'counter');
+    await setDoc(visitsRef, { count: 0 });
+    log('✓ تم إنشاء عداد الزيارات', 'success');
+    
+    // 3. Initialize portfolio with default images
+    log('جاري إضافة الأعمال الافتراضية...', 'info');
+    const portfolioImages = [
+      { url: 'https://hack056.github.io/cvzone-site/images/cv1.png', desc: 'نموذج سيرة ذاتية 1' },
+      { url: 'https://hack056.github.io/cvzone-site/images/cv2.png', desc: 'نموذج سيرة ذاتية 2' },
+      { url: 'https://hack056.github.io/cvzone-site/images/cv3.png', desc: 'نموذج سيرة ذاتية 3' },
+      { url: 'https://hack056.github.io/cvzone-site/images/cv4.png', desc: 'نموذج سيرة ذاتية 4' },
+      { url: 'https://hack056.github.io/cvzone-site/images/cv5.png', desc: 'نموذج سيرة ذاتية 5' },
+      { url: 'https://hack056.github.io/cvzone-site/images/cv6.png', desc: 'نموذج سيرة ذاتية 6' }
+    ];
+    
+    for (let i = 0; i < portfolioImages.length; i++) {
+      const img = portfolioImages[i];
+      await addDoc(collection(db, 'portfolio'), {
+        imageUrl: img.url,
+        desc: img.desc,
+        createdAt: Date.now(),
+        order: Date.now() - (i * 1000)
+      });
+    }
+    log(`✓ تم إضافة ${portfolioImages.length} أعمال افتراضية`, 'success');
+    
+    // 4. Initialize testimonials
+    log('جاري إضافة الآراء الافتراضية...', 'info');
+    const testimonials = [
+      {
+        name: 'أحمد حسن',
+        text: 'بصراحة الشغل مرتب جداً، السيرة الذاتية فرقت معايا كتير في المقابلات. شكراً ليكم على الذوق في التعامل.',
+        date: 'منذ يومين',
+        replies: [
+          { name: 'سارة محمود', text: 'فعلاً والله أنا كمان عملت عندهم والـ HR سألني مين اللي منسق الـ CV ده.' },
+          { name: 'CVZone', text: 'تسلم يا أستاذ أحمد، ده واجبنا وبالتوفيق في وظيفتك الجديدة.' }
+        ]
+      },
+      {
+        name: 'منى سامي',
+        text: 'كنت خايفة من موضوع الـ ATS بس الحمد لله الملف اتقبل في أكتر من شركة كبيرة. التعامل كان سريع جداً.',
+        date: 'منذ أسبوع',
+        replies: [
+          { name: 'خالد حسن', text: 'منى، خدوا وقت قد إيه عشان يخلصوه؟' },
+          { name: 'منى سامي', text: 'تقريباً يوم واحد وكان الملف جاهز يا خالد.' }
+        ]
+      }
+    ];
+    
+    for (const test of testimonials) {
+      await addDoc(collection(db, 'testimonials'), {
+        name: test.name,
+        text: test.text,
+        date: test.date,
+        replies: test.replies,
+        createdAt: Date.now(),
+        order: Date.now()
+      });
+    }
+    log(`✓ تم إضافة ${testimonials.length} آراء افتراضية`, 'success');
+    
+    // 5. Check existing data
+    log('جاري التحقق من البيانات...', 'info');
+    const portfolioSnap = await getDocs(collection(db, 'portfolio'));
+    const testimonialsSnap = await getDocs(collection(db, 'testimonials'));
+    const commentsSnap = await getDocs(collection(db, 'comments'));
+    
+    log(`✓ عدد الأعمال: ${portfolioSnap.size}`, 'success');
+    log(`✓ عدد الآراء: ${testimonialsSnap.size}`, 'success');
+    log(`✓ عدد التعليقات: ${commentsSnap.size}`, 'success');
+    
+    updateStatus('✅ تم التهيئة بنجاح!', 'success');
+    log('التهيئة اكتملت بنجاح. يمكنك الآن الذهاب إلى لوحة التحكم.', 'success');
+    
+  } catch (error) {
+    console.error('Error:', error);
+    log(`❌ خطأ: ${error.message}`, 'error');
+    updateStatus(`خطأ: ${error.message}`, 'error');
+    document.getElementById('initBtn').disabled = false;
+  }
+};
+
+// Auto-check if data exists
+async function checkExistingData() {
+  try {
+    const siteSettingsSnap = await getDocs(collection(db, 'site_settings'));
+    if (siteSettingsSnap.size > 0) {
+      log('البيانات موجودة بالفعل في Firestore', 'info');
+      updateStatus('البيانات موجودة بالفعل', 'success');
+    } else {
+      log('لم يتم العثور على بيانات افتراضية', 'info');
+      updateStatus('اضغط على بدء التهيئة لإضافة البيانات الافتراضية', 'loading');
+    }
+  } catch (error) {
+    log(`خطأ في التحقق: ${error.message}`, 'error');
+  }
+}
+
+checkExistingData();
+</script>
+
+</body>
+</html>
