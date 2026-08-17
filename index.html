@@ -66,17 +66,17 @@
 
 <style>
 :root {
-  --gold: #d4af37;
-  --gold-light: #e8c547;
-  --gold-dark: #b8941f;
+  --gold: #27d7c4;
+  --gold-light: #83f6e9;
+  --gold-dark: #0e998f;
   --text: #f8fafc;
   --text-dim: #94a3b8;
   --text-muted: #64748b;
-  --border: rgba(255,255,255,0.09);
+  --border: rgba(190, 255, 248, 0.16);
   --radius: 20px;
-  --glass-bg: rgba(8, 11, 18, 0.72);
-  --gradient-gold: linear-gradient(135deg, #d4af37, #e8c547, #d4af37);
-  --shadow-gold: 0 8px 32px rgba(212,175,55,0.25);
+  --glass-bg: linear-gradient(135deg, rgba(19, 83, 91, 0.58), rgba(7, 27, 38, 0.68));
+  --gradient-gold: linear-gradient(135deg, #12bfb1, #83f6e9, #27d7c4);
+  --shadow-gold: 0 12px 36px rgba(39, 215, 196, 0.18);
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
@@ -86,6 +86,7 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   min-height: 100vh;
+  background: #061419;
 }
 
 /* ══════════════════════════════
@@ -119,7 +120,10 @@ body {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background: rgba(4, 6, 12, 0.45);
+  background:
+    radial-gradient(circle at 15% 12%, rgba(39, 215, 196, 0.16), transparent 30%),
+    radial-gradient(circle at 88% 38%, rgba(91, 224, 215, 0.11), transparent 28%),
+    rgba(3, 13, 19, 0.58);
 }
 
 /* ══════════════════════════════
@@ -133,15 +137,15 @@ nav {
   align-items: center;
   justify-content: space-between;
   padding: 10px 5%;
-  background: rgba(5, 7, 10, 0.88);
+  background: rgba(4, 25, 31, 0.76);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
   transition: all 0.3s ease;
 }
 nav.scrolled {
   padding: 8px 5%;
-  background: rgba(5, 7, 10, 0.95);
-  box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+  background: rgba(4, 25, 31, 0.92);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.28);
 }
 .nav-logo-img { height: 58px; width: auto; transition: 0.3s; }
 .nav.scrolled .nav-logo-img { height: 48px; }
@@ -185,7 +189,7 @@ nav.scrolled {
 }
 .hero-logo {
   width: 210px; margin-bottom: 18px;
-  filter: drop-shadow(0 0 28px rgba(212,175,55,0.4));
+  filter: drop-shadow(0 0 28px rgba(39, 215, 196, 0.38));
   animation: float 3s ease-in-out infinite;
 }
 @keyframes float {
@@ -198,7 +202,7 @@ nav.scrolled {
 }
 .hero-title span {
   color: var(--gold);
-  text-shadow: 0 0 40px rgba(212,175,55,0.3);
+  text-shadow: 0 0 40px rgba(39, 215, 196, 0.3);
 }
 .hero-sub { color: #dde4ef; font-size: 17px; max-width: 720px; margin: 0 auto 38px; line-height: 1.8; }
 
@@ -241,7 +245,7 @@ nav.scrolled {
 }
 .hero-cta:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 35px rgba(212,175,55,0.35);
+  box-shadow: 0 12px 35px rgba(39, 215, 196, 0.3);
 }
 
 /* ══════════════════════════════
@@ -284,7 +288,7 @@ nav.scrolled {
   user-select: none;
   cursor: pointer;
 }
-.cv-card:hover { transform: translateY(-7px); border-color: var(--gold); box-shadow: 0 18px 45px rgba(212,175,55,0.18); }
+.cv-card:hover { transform: translateY(-7px); border-color: var(--gold); box-shadow: 0 18px 45px rgba(39, 215, 196, 0.16); }
 
 .cv-img-wrap { height: 420px; position: relative; overflow: hidden; }
 .cv-img-wrap img {
@@ -314,7 +318,7 @@ nav.scrolled {
   color: rgba(255,255,255,0.18);
   letter-spacing: 4px;
   filter: blur(2.5px);
-  text-shadow: 0 0 20px rgba(212,175,55,0.25);
+  text-shadow: 0 0 20px rgba(39, 215, 196, 0.24);
   transform: rotate(-25deg);
   white-space: nowrap;
   user-select: none;
@@ -414,7 +418,7 @@ nav.scrolled {
   border-radius: 15px;
   transition: 0.3s;
 }
-.review-box:hover { border-color: rgba(212,175,55,0.3); }
+.review-box:hover { border-color: rgba(39, 215, 196, 0.36); box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14); }
 .review-header { display: flex; justify-content: space-between; margin-bottom: 10px; align-items: center; }
 .user-info { display: flex; align-items: center; gap: 10px; }
 .user-avatar {
@@ -484,7 +488,7 @@ textarea.comment-input { resize: vertical; min-height: 50px; }
   gap: 6px;
   flex-shrink: 0;
 }
-.comment-submit-btn:hover { box-shadow: 0 6px 20px rgba(212,175,55,0.3); }
+.comment-submit-btn:hover { box-shadow: 0 6px 20px rgba(39, 215, 196, 0.28); }
 
 /* User Comment Box */
 .user-comment-box {
@@ -523,7 +527,7 @@ textarea.comment-input { resize: vertical; min-height: 50px; }
   border: none; border-radius: 8px; font-weight: 700; font-size: 12px;
   cursor: pointer; font-family: inherit;
 }
-.replies-list { margin-top: 10px; padding-right: 12px; border-right: 2px solid rgba(212,175,55,0.4); display: flex; flex-direction: column; gap: 6px; }
+.replies-list { margin-top: 10px; padding-right: 12px; border-right: 2px solid rgba(39, 215, 196, 0.46); display: flex; flex-direction: column; gap: 6px; }
 .reply-item { font-size: 12px; color: var(--text-dim); }
 .reply-item b { color: #dde4ef; }
 
@@ -539,7 +543,7 @@ textarea.comment-input { resize: vertical; min-height: 50px; }
   border-radius: 14px; overflow: hidden; border: 1px solid var(--border);
   background: var(--glass-bg); backdrop-filter: blur(10px); transition: 0.4s;
 }
-.testimonial-img-card:hover { transform: translateY(-5px); border-color: var(--gold); box-shadow: 0 14px 38px rgba(212,175,55,0.14); }
+.testimonial-img-card:hover { transform: translateY(-5px); border-color: var(--gold); box-shadow: 0 14px 38px rgba(39, 215, 196, 0.14); }
 .testimonial-img-card img { width: 100%; display: block; }
 
 /* ══════════════════════════════
@@ -567,7 +571,7 @@ textarea.comment-input { resize: vertical; min-height: 50px; }
   color: #fff; font-family: inherit; font-size: 14px;
   outline: none; transition: 0.3s; width: 100%;
 }
-.input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,175,55,0.1); }
+.input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(39, 215, 196, 0.15); }
 .input::placeholder { color: rgba(148,163,184,0.45); }
 select.input { appearance: none; cursor: pointer; }
 .input.error { border-color: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,0.1); }
@@ -580,7 +584,7 @@ select.input { appearance: none; cursor: pointer; }
   font-family: inherit; letter-spacing: 0.3px;
   display: flex; align-items: center; justify-content: center; gap: 8px;
 }
-.submit-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(212,175,55,0.32); }
+.submit-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(39, 215, 196, 0.28); }
 
 /* Success Message */
 .form-success {
@@ -639,7 +643,7 @@ footer {
   border-color: var(--gold);
   color: var(--gold);
   transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(212,175,55,0.2);
+  box-shadow: 0 6px 20px rgba(39, 215, 196, 0.18);
 }
 .footer-social .wa-icon:hover { color: #25d366; border-color: #25d366; }
 .footer-social .fb-icon:hover { color: #1877f2; border-color: #1877f2; }
@@ -681,10 +685,10 @@ footer {
   opacity: 0;
   visibility: hidden;
   transition: 0.3s;
-  box-shadow: 0 4px 15px rgba(212,175,55,0.3);
+  box-shadow: 0 4px 15px rgba(39, 215, 196, 0.25);
 }
 .back-to-top.visible { opacity: 1; visibility: visible; }
-.back-to-top:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(212,175,55,0.4); }
+.back-to-top:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(39, 215, 196, 0.35); }
 
 /* WhatsApp Float Button */
 .wa-float {
@@ -810,7 +814,7 @@ footer {
 <section id="portfolio">
   <h2 class="section-title" data-aos="fade-up">بعض من <span>أعمالنا</span></h2>
   <div class="portfolio-grid" id="portfolioGrid">
-    <!-- Loaded dynamically from Firebase -->
+    <!-- تعرض الأعمال الأصلية فوراً، ثم تُحدّث من Firebase عند توفرها. -->
   </div>
 </section>
 
@@ -825,7 +829,7 @@ footer {
   <div class="reviews-container">
     <h2 class="section-title" data-aos="fade-up" style="margin-bottom:24px;">آراء <span>عملاء حقيقيين</span></h2>
 
-    <!-- Loaded dynamically from Firebase -->
+    <!-- تعرض الآراء الأصلية فوراً، ثم تُحدّث من Firebase عند توفرها. -->
     <div id="testimonialsList"></div>
   </div>
 
@@ -1001,97 +1005,112 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+const fallbackPortfolio = [
+  { imageUrl: 'images/cv1.png', desc: 'نموذج سيرة ذاتية احترافي من CVZone' },
+  { imageUrl: 'images/cv2.png', desc: 'نموذج سيرة ذاتية احترافي من CVZone' },
+  { imageUrl: 'images/cv3.png', desc: 'نموذج سيرة ذاتية احترافي من CVZone' },
+  { imageUrl: 'images/cv4.png', desc: 'نموذج سيرة ذاتية احترافي من CVZone' },
+  { imageUrl: 'images/cv5.png', desc: 'نموذج سيرة ذاتية احترافي من CVZone' },
+  { imageUrl: 'images/cv6.png', desc: 'نموذج سيرة ذاتية احترافي من CVZone' }
+];
+
+const fallbackTestimonials = [
+  {
+    name: 'أحمد حسن', date: 'منذ يومين',
+    text: 'بصراحة الشغل مرتب جداً، السيرة الذاتية فرقت معايا كتير في المقابلات. شكراً ليكم على الذوق في التعامل.',
+    replies: [
+      { name: 'سارة محمود', text: 'فعلاً والله أنا كمان عملت عندهم والـ HR سألني مين اللي منسق الـ CV ده.' },
+      { name: 'CVZone', text: 'تسلم يا أستاذ أحمد، ده واجبنا وبالتوفيق في وظيفتك الجديدة.' }
+    ]
+  },
+  {
+    name: 'منى سامي', date: 'منذ أسبوع',
+    text: 'كنت خايفة من موضوع الـ ATS بس الحمد لله الملف اتقبل في أكتر من شركة كبيرة. التعامل كان سريع جداً.',
+    replies: [
+      { name: 'خالد حسن', text: 'منى، خدوا وقت قد إيه عشان يخلصوه؟' },
+      { name: 'منى سامي', text: 'تقريباً يوم واحد وكان الملف جاهز يا خالد.' }
+    ]
+  }
+];
+
 // Make Firebase available globally
 window.db = db;
 window.firestore = { collection, getDocs, addDoc, onSnapshot, query, orderBy, updateDoc, doc, increment };
 
 // ─── LOAD PORTFOLIO ───
-async function loadPortfolio() {
+function renderPortfolio(items) {
   const grid = document.getElementById('portfolioGrid');
   grid.innerHTML = '';
-  
-  try {
-    const q = window.firestore.query(
-      window.firestore.collection(db, 'portfolio'),
-      window.firestore.orderBy('order', 'desc')
-    );
-    
-    window.firestore.onSnapshot(q, (snapshot) => {
-      grid.innerHTML = '';
-      if (snapshot.empty) {
-        grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-dim)">جاري تحميل الأعمال...</p>';
-        return;
-      }
-      
-      snapshot.forEach(docSnap => {
-        const data = docSnap.data();
-        const card = document.createElement('div');
-        card.className = 'cv-card';
-        card.onclick = () => openLightbox(card);
-        card.innerHTML = `
-          <div class="cv-img-wrap">
-            <img src="${data.imageUrl}" alt="${data.desc || 'نموذج سيرة ذاتية'}" draggable="false">
-            <div class="cv-watermark"><span class="cv-watermark-text">CVZone</span></div>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-    });
-  } catch (e) {
-    console.error('Error loading portfolio:', e);
-  }
+  items.forEach(data => {
+    if (!data.imageUrl) return;
+    const card = document.createElement('div');
+    card.className = 'cv-card';
+    card.onclick = () => openLightbox(card);
+    card.innerHTML = `
+      <div class="cv-img-wrap">
+        <img src="${data.imageUrl}" alt="${data.desc || 'نموذج سيرة ذاتية'}" draggable="false">
+        <div class="cv-watermark"><span class="cv-watermark-text">CVZone</span></div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function loadPortfolio() {
+  renderPortfolio(fallbackPortfolio);
+  const q = window.firestore.query(
+    window.firestore.collection(db, 'portfolio'),
+    window.firestore.orderBy('order', 'desc')
+  );
+  window.firestore.onSnapshot(q, (snapshot) => {
+    const liveItems = snapshot.docs.map(docSnap => docSnap.data()).filter(item => item.imageUrl);
+    if (liveItems.length) renderPortfolio(liveItems);
+  }, (e) => console.warn('تعذر تحميل أعمال Firebase، تم عرض الأعمال الأصلية.', e));
 }
 
 // ─── LOAD TESTIMONIALS ───
-async function loadTestimonials() {
+function renderTestimonials(items) {
   const container = document.getElementById('testimonialsList');
   container.innerHTML = '';
-  
-  try {
-    const q = window.firestore.query(
-      window.firestore.collection(db, 'testimonials'),
-      window.firestore.orderBy('order', 'desc')
-    );
-    
-    window.firestore.onSnapshot(q, (snapshot) => {
-      container.innerHTML = '';
-      if (snapshot.empty) return;
-      
-      snapshot.forEach(docSnap => {
-        const data = docSnap.data();
-        const card = document.createElement('div');
-        card.className = 'review-box';
-        card.setAttribute('data-aos', 'fade-up');
-        
-        let repliesHTML = '';
-        if (data.replies && data.replies.length > 0) {
-          repliesHTML = '<div class="reply-chain">';
-          data.replies.forEach(reply => {
-            repliesHTML += `<div class="reply"><b>${reply.name}:</b> ${reply.text}</div>`;
-          });
-          repliesHTML += '</div>';
-        }
-        
-        card.innerHTML = `
-          <div class="review-header">
-            <div class="user-info">
-              <div class="user-avatar">${getInitials(data.name)}</div>
-              <span class="user-name">${data.name}</span>
-            </div>
-            <span class="review-date">${data.date || 'منذ قليل'}</span>
-          </div>
-          <div class="review-stars">${'<i class="fas fa-star"></i>'.repeat(5)}</div>
-          <p class="review-text">${data.text}</p>
-          ${repliesHTML}
-        `;
-        container.appendChild(card);
+  items.forEach(data => {
+    const card = document.createElement('div');
+    card.className = 'review-box';
+    card.setAttribute('data-aos', 'fade-up');
+    let repliesHTML = '';
+    if (data.replies && data.replies.length > 0) {
+      repliesHTML = '<div class="reply-chain">';
+      data.replies.forEach(reply => {
+        repliesHTML += `<div class="reply"><b>${reply.name}:</b> ${reply.text}</div>`;
       });
-      
-      AOS.refresh();
-    });
-  } catch (e) {
-    console.error('Error loading testimonials:', e);
-  }
+      repliesHTML += '</div>';
+    }
+    card.innerHTML = `
+      <div class="review-header">
+        <div class="user-info">
+          <div class="user-avatar">${getInitials(data.name)}</div>
+          <span class="user-name">${data.name}</span>
+        </div>
+        <span class="review-date">${data.date || 'منذ قليل'}</span>
+      </div>
+      <div class="review-stars">${'<i class="fas fa-star"></i>'.repeat(5)}</div>
+      <p class="review-text">${data.text}</p>
+      ${repliesHTML}
+    `;
+    container.appendChild(card);
+  });
+  AOS.refresh();
+}
+
+function loadTestimonials() {
+  renderTestimonials(fallbackTestimonials);
+  const q = window.firestore.query(
+    window.firestore.collection(db, 'testimonials'),
+    window.firestore.orderBy('order', 'desc')
+  );
+  window.firestore.onSnapshot(q, (snapshot) => {
+    const liveItems = snapshot.docs.map(docSnap => docSnap.data()).filter(item => item.name && item.text);
+    if (liveItems.length) renderTestimonials(liveItems);
+  }, (e) => console.warn('تعذر تحميل آراء Firebase، تم عرض الآراء الأصلية.', e));
 }
 
 // ─── LOAD COMMENTS ───
