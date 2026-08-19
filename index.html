@@ -1057,6 +1057,32 @@ nav, nav.scrolled { background: rgba(5, 14, 24, 0.88); border-bottom-color: rgba
 .offer-summary strong { color: #fff; }
 .referral-note { max-width: 820px; margin: 14px auto 0; padding: 15px 18px; border-right: 3px solid #4bddd1; border-radius: 0 10px 10px 0; background: rgba(75, 221, 209, .07); color: #bdd5df; font-size: 12px; line-height: 1.8; }
 .referral-note b { color: #8cf7ed; }
+.price-arrow, .new-price, .price-currency { opacity: 0; visibility: hidden; max-width: 0; overflow: hidden; transform: translateX(8px); transition: opacity .36s ease, transform .36s ease, max-width .36s ease; }
+.old-price { color: #e5f6f8; text-decoration: none; font-size: 17px; font-weight: 800; transition: color .3s ease, text-decoration-color .3s ease; }
+body.coupon-ready .old-price { color: #8da4b2; text-decoration: line-through; font-size: 13px; font-weight: 400; }
+body.coupon-ready .price-arrow, body.coupon-ready .new-price, body.coupon-ready .price-currency { opacity: 1; visibility: visible; max-width: 170px; transform: translateX(0); }
+body.coupon-ready .price-arrow { color: #8deee5; font-size: 17px; font-weight: 800; }
+body.coupon-ready .offer-card { border-color: rgba(105, 243, 230, .43); }
+body.coupon-ready .offer-status { color: #8ef7ed; }
+.offer-guide { display: none; max-width: 1160px; margin: 0 auto 16px; align-items: center; justify-content: center; gap: 10px; color: #a6fff5; font-size: 14px; font-weight: 800; text-align: center; }
+.offer-guide.show { display: flex; animation: guideIn .4s ease both; }
+.offer-guide i { font-size: 19px; animation: pointDown 1s ease-in-out infinite; }
+.welcome-modal { position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; padding: 22px; background: rgba(1, 10, 18, .74); backdrop-filter: blur(9px); opacity: 0; visibility: hidden; transition: opacity .28s ease, visibility .28s ease; }
+.welcome-modal.is-open { opacity: 1; visibility: visible; }
+.welcome-dialog { position: relative; width: min(100%, 480px); overflow: hidden; border: 1px solid rgba(126, 247, 235, .43); border-radius: 24px; padding: 34px 30px 28px; color: #ecffff; text-align: center; background: linear-gradient(145deg, rgba(18, 65, 77, .98), rgba(4, 15, 27, .99)); box-shadow: 0 28px 90px rgba(0,0,0,.56), inset 0 1px 0 rgba(255,255,255,.08); transform: translateY(14px) scale(.97); transition: transform .28s ease; }
+.welcome-modal.is-open .welcome-dialog { transform: translateY(0) scale(1); }
+.welcome-dialog::before { content: ''; position: absolute; width: 250px; height: 250px; top: -165px; right: -76px; border-radius: 50%; background: radial-gradient(circle, rgba(100, 245, 232, .34), transparent 68%); pointer-events: none; }
+.welcome-close { position: absolute; top: 12px; left: 12px; width: 34px; height: 34px; border: 1px solid rgba(207,255,250,.18); border-radius: 50%; color: #c4e9e7; background: rgba(255,255,255,.06); cursor: pointer; font-size: 18px; }
+.welcome-gift { position: relative; display: inline-grid; place-items: center; width: 64px; height: 64px; margin-bottom: 13px; border-radius: 20px; color: #083139; font-size: 30px; background: linear-gradient(135deg, #72f4e8, #2ebcb3); box-shadow: 0 10px 28px rgba(69, 233, 219, .24); }
+.welcome-kicker { position: relative; margin: 0 0 8px; color: #94fff5; font-size: 13px; font-weight: 800; letter-spacing: .25px; }
+.welcome-title { position: relative; margin: 0; color: #fff; font-size: clamp(23px, 5vw, 29px); line-height: 1.35; }
+.welcome-copy { position: relative; margin: 12px auto 18px; max-width: 370px; color: #bdd8df; font-size: 14px; line-height: 1.85; }
+.welcome-code { position: relative; display: flex; align-items: center; justify-content: center; gap: 9px; margin: 0 auto 13px; padding: 14px; border: 1px dashed rgba(127, 248, 237, .6); border-radius: 14px; color: #9dfff5; background: rgba(0,0,0,.22); font-size: 24px; font-weight: 900; letter-spacing: 1.2px; }
+.welcome-action { position: relative; width: 100%; border: 0; border-radius: 13px; padding: 14px 16px; color: #062027; background: linear-gradient(135deg, #29c4b9, #79f2e7); cursor: pointer; font-family: inherit; font-size: 15px; font-weight: 900; box-shadow: 0 11px 25px rgba(58, 224, 210, .2); transition: transform .2s ease, filter .2s ease; }
+.welcome-action:hover { transform: translateY(-2px); filter: brightness(1.05); }
+.welcome-note { position: relative; margin: 11px 0 0; color: #89aab5; font-size: 11px; }
+@keyframes pointDown { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+@keyframes guideIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
 
 body.light-mode { color: #172a3a; background: #f4f7f8; background-image: none; }
 body.light-mode::before, body.light-mode .site-bg, body.light-mode .site-bg-overlay { display: none; }
@@ -1075,6 +1101,8 @@ body.light-mode .offer-note, body.light-mode .coupon-desc, body.light-mode .coup
 body.light-mode .coupon-code, body.light-mode .offer-summary { background: #f4fbfb; color: #087f79; }
 body.light-mode .copy-coupon { background: #e6f6f5; color: #0b605b; }
 body.light-mode .new-price { color: #087f79; }
+body.light-mode .old-price { color: #173247; }
+body.light-mode.coupon-ready .old-price { color: #718896; }
 body.light-mode footer { background: #071f2c; }
 
 @media (max-width: 768px) {
@@ -1084,12 +1112,27 @@ body.light-mode footer { background: #071f2c; }
   .coupon-code-row .apply-coupon { min-height: 42px; }
   .coupon-entry { flex-direction: column; }
   .coupon-entry .apply-coupon { min-height: 44px; }
+  .welcome-dialog { padding: 31px 21px 23px; border-radius: 21px; }
   body:not(.light-mode) .nav-links.active { background: rgba(5, 14, 24, .98); border-bottom-color: rgba(147, 230, 224, .14); }
   .theme-toggle { margin-right: 0; margin-left: 6px; }
 }
 </style>
 </head>
 <body>
+
+<!-- نافذة هدية أول زيارة -->
+<div class="welcome-modal" id="welcomeModal" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle" onclick="dismissWelcomeOffer(event)">
+  <div class="welcome-dialog">
+    <button class="welcome-close" type="button" aria-label="إغلاق رسالة الترحيب" onclick="closeWelcomeOffer()">×</button>
+    <div class="welcome-gift">🎁</div>
+    <p class="welcome-kicker">أهلًا بيك في CVZone ✨</p>
+    <h2 class="welcome-title" id="welcomeTitle">هديّة البداية ليك</h2>
+    <p class="welcome-copy">بما إن دي أول زيارة ليك، جهّزنا لك كود ترحيبي يفعّل أسعار العروض فورًا. انسخه الآن وشاهد الأسعار وهي بتنزل قدامك.</p>
+    <div class="welcome-code"><i class="fas fa-ticket-alt"></i> CVZone</div>
+    <button class="welcome-action" type="button" onclick="copyWelcomeCoupon()"><i class="far fa-copy"></i> انسخ الهدية وشاهد العرض</button>
+    <p class="welcome-note">الكود لا يفرّق بين الحروف الكبيرة والصغيرة.</p>
+  </div>
+</div>
 
 <!-- Scroll Progress Bar -->
 <div class="scroll-progress" id="scrollProgress"></div>
@@ -1158,13 +1201,14 @@ body.light-mode footer { background: #071f2c; }
 <section id="offers">
   <h2 class="section-title" data-aos="fade-up">عروض <span>CV Zone</span></h2>
   <p class="offers-intro" data-aos="fade-up">اختر الخدمة المناسبة ثم استخدم كود الترحيب لتفعيل سعر العرض. جميع السير الذاتية تشمل نسختي <b>PDF</b> و<b>Word</b> معاً دون رسوم إضافية.</p>
+  <div class="offer-guide" id="offerGuide" aria-live="polite"><span>اختر الخدمة المناسبة — أسعار هديتك مفعّلة الآن</span><i class="fas fa-arrow-down"></i></div>
   <div class="offer-grid" id="offerGrid">
-    <article class="offer-card" data-service="CV عربي" data-old="70" data-new="50" onclick="chooseOffer(this)"><span class="offer-badge"><i class="fas fa-file-alt"></i> الأكثر طلباً</span><h3 class="offer-name">CV عربي</h3><p class="offer-note">تنسيق احترافي واضح وجاهز للتقديم.</p><div class="price-row"><span class="old-price">70 جنيه</span><span class="new-price">50</span><span class="price-currency">جنيه بعد العرض</span></div><p class="offer-status">يفعّل بكود CVZone</p></article>
-    <article class="offer-card" data-service="CV English" data-old="100" data-new="70" onclick="chooseOffer(this)"><span class="offer-badge"><i class="fas fa-globe"></i> ATS Ready</span><h3 class="offer-name">CV English</h3><p class="offer-note">سيرة إنجليزية مصممة للتقديم الوظيفي.</p><div class="price-row"><span class="old-price">100 جنيه</span><span class="new-price">70</span><span class="price-currency">جنيه بعد العرض</span></div><p class="offer-status">يفعّل بكود CVZone</p></article>
-    <article class="offer-card" data-service="Cover Letter" data-old="70" data-new="50" onclick="chooseOffer(this)"><span class="offer-badge"><i class="fas fa-pen-nib"></i> مخصص للوظيفة</span><h3 class="offer-name">Cover Letter</h3><p class="offer-note">خطاب تقديم مهني يوضح قيمتك للجهة المستهدفة.</p><div class="price-row"><span class="old-price">70 جنيه</span><span class="new-price">50</span><span class="price-currency">جنيه بعد العرض</span></div><p class="offer-status">يفعّل بكود CVZone</p></article>
-    <article class="offer-card" data-service="تحسين LinkedIn" data-old="150" data-new="100" onclick="chooseOffer(this)"><span class="offer-badge"><i class="fab fa-linkedin"></i> ظهور أقوى</span><h3 class="offer-name">تحسين LinkedIn</h3><p class="offer-note">تحسين الملف الشخصي ليعكس خبرتك باحتراف.</p><div class="price-row"><span class="old-price">150 جنيه</span><span class="new-price">100</span><span class="price-currency">جنيه بعد العرض</span></div><p class="offer-status">يفعّل بكود CVZone</p></article>
-    <article class="offer-card featured" data-service="باكدج التوظيف: CV English + Cover Letter" data-old="170" data-new="110" onclick="chooseOffer(this)"><span class="offer-badge"><i class="fas fa-briefcase"></i> باكدج التوظيف</span><h3 class="offer-name">CV English + Cover Letter</h3><p class="offer-note">المزيج المناسب للتقديم على فرص العمل بثقة.</p><div class="price-row"><span class="old-price">170 جنيه</span><span class="new-price">110</span><span class="price-currency">جنيه بعد العرض</span></div><p class="offer-status">يفعّل بكود CVZone</p></article>
-    <article class="offer-card featured" data-service="الباكدج الكامل: CV English + Cover Letter + LinkedIn" data-old="320" data-new="200" onclick="chooseOffer(this)"><span class="offer-badge"><i class="fas fa-crown"></i> الباكدج الكامل</span><h3 class="offer-name">CV + Cover Letter + LinkedIn</h3><p class="offer-note">ملف مهني متكامل للتقديم والظهور الاحترافي.</p><div class="price-row"><span class="old-price">320 جنيه</span><span class="new-price">200</span><span class="price-currency">جنيه بعد العرض</span></div><p class="offer-status">يفعّل بكود CVZone</p></article>
+    <article class="offer-card" data-service="CV عربي" data-old="70" data-new="50" onclick="chooseOffer(this)"><span class="offer-badge"><i class="fas fa-file-alt"></i> الأكثر طلباً</span><h3 class="offer-name">CV عربي</h3><p class="offer-note">تنسيق احترافي واضح وجاهز للتقديم.</p><div class="price-row"><span class="old-price">70 جنيه</span><span class="price-arrow">←</span><span class="new-price">50</span><span class="price-currency">جنيه بعد هديتك</span></div><p class="offer-status">انسخ هدية الترحيب لتفعيل الخصم</p></article>
+    <article class="offer-card" data-service="CV English" data-old="100" data-new="70" onclick="chooseOffer(this)"><span class="offer-badge"><i class="fas fa-globe"></i> ATS Ready</span><h3 class="offer-name">CV English</h3><p class="offer-note">سيرة إنجليزية مصممة للتقديم الوظيفي.</p><div class="price-row"><span class="old-price">100 جنيه</span><span class="price-arrow">←</span><span class="new-price">70</span><span class="price-currency">جنيه بعد هديتك</span></div><p class="offer-status">انسخ هدية الترحيب لتفعيل الخصم</p></article>
+    <article class="offer-card" data-service="Cover Letter" data-old="70" data-new="50" onclick="chooseOffer(this)"><span class="offer-badge"><i class="fas fa-pen-nib"></i> مخصص للوظيفة</span><h3 class="offer-name">Cover Letter</h3><p class="offer-note">خطاب تقديم مهني يوضح قيمتك للجهة المستهدفة.</p><div class="price-row"><span class="old-price">70 جنيه</span><span class="price-arrow">←</span><span class="new-price">50</span><span class="price-currency">جنيه بعد هديتك</span></div><p class="offer-status">انسخ هدية الترحيب لتفعيل الخصم</p></article>
+    <article class="offer-card" data-service="تحسين LinkedIn" data-old="150" data-new="100" onclick="chooseOffer(this)"><span class="offer-badge"><i class="fab fa-linkedin"></i> ظهور أقوى</span><h3 class="offer-name">تحسين LinkedIn</h3><p class="offer-note">تحسين الملف الشخصي ليعكس خبرتك باحتراف.</p><div class="price-row"><span class="old-price">150 جنيه</span><span class="price-arrow">←</span><span class="new-price">100</span><span class="price-currency">جنيه بعد هديتك</span></div><p class="offer-status">انسخ هدية الترحيب لتفعيل الخصم</p></article>
+    <article class="offer-card featured" data-service="باكدج التوظيف: CV English + Cover Letter" data-old="170" data-new="110" onclick="chooseOffer(this)"><span class="offer-badge"><i class="fas fa-briefcase"></i> باكدج التوظيف</span><h3 class="offer-name">CV English + Cover Letter</h3><p class="offer-note">المزيج المناسب للتقديم على فرص العمل بثقة.</p><div class="price-row"><span class="old-price">170 جنيه</span><span class="price-arrow">←</span><span class="new-price">110</span><span class="price-currency">جنيه بعد هديتك</span></div><p class="offer-status">انسخ هدية الترحيب لتفعيل الخصم</p></article>
+    <article class="offer-card featured" data-service="الباكدج الكامل: CV English + Cover Letter + LinkedIn" data-old="320" data-new="200" onclick="chooseOffer(this)"><span class="offer-badge"><i class="fas fa-crown"></i> الباكدج الكامل</span><h3 class="offer-name">CV + Cover Letter + LinkedIn</h3><p class="offer-note">ملف مهني متكامل للتقديم والظهور الاحترافي.</p><div class="price-row"><span class="old-price">320 جنيه</span><span class="price-arrow">←</span><span class="new-price">200</span><span class="price-currency">جنيه بعد هديتك</span></div><p class="offer-status">انسخ هدية الترحيب لتفعيل الخصم</p></article>
   </div>
   <div class="coupon-panel" data-aos="fade-up">
     <h3 class="coupon-heading">هدية ترحيبية لأول استخدام</h3>
@@ -1788,16 +1832,58 @@ function setTheme(mode) {
 }
 function toggleTheme() { setTheme(document.body.classList.contains('light-mode') ? 'dark' : 'light'); }
 function normalizeCoupon(value) { return value.trim().replace(/\s+/g, '').toLocaleLowerCase('en-US'); }
+function showOfferGuide() {
+  const guide = document.getElementById('offerGuide');
+  guide.classList.add('show');
+  window.clearTimeout(window.cvzoneGuideTimer);
+  window.cvzoneGuideTimer = window.setTimeout(() => guide.classList.remove('show'), 8500);
+}
+function armCoupon({ scrollToOffers = false, copied = false } = {}) {
+  const input = document.getElementById('couponInput');
+  const result = document.getElementById('couponResult');
+  input.value = 'CVZone';
+  document.body.classList.add('coupon-ready');
+  document.querySelectorAll('.offer-card').forEach(card => {
+    card.classList.add('coupon-active');
+    card.querySelector('.offer-status').innerHTML = '<i class="fas fa-check-circle"></i> هديتك مفعّلة — اختر العرض';
+  });
+  result.className = 'coupon-result success';
+  result.textContent = copied ? 'تم نسخ كود CVZone وتفعيل أسعار الهدية. اختر الخدمة المناسبة الآن.' : 'تم تفعيل أسعار الهدية. اختر الخدمة المناسبة الآن.';
+  showOfferGuide();
+  if (scrollToOffers) window.setTimeout(() => document.getElementById('offers').scrollIntoView({ behavior: 'smooth', block: 'start' }), 280);
+}
+function closeWelcomeOffer() {
+  document.getElementById('welcomeModal').classList.remove('is-open');
+  sessionStorage.setItem('cvzone-welcome-seen', 'true');
+}
+function dismissWelcomeOffer(event) {
+  if (event.target === document.getElementById('welcomeModal')) closeWelcomeOffer();
+}
+async function copyWelcomeCoupon() {
+  const code = 'CVZone';
+  try { await navigator.clipboard.writeText(code); } catch (_) {
+    const input = document.getElementById('couponInput'); input.value = code; input.select(); document.execCommand('copy');
+  }
+  closeWelcomeOffer();
+  armCoupon({ scrollToOffers: true, copied: true });
+}
 function chooseOffer(card) {
   document.querySelectorAll('.offer-card').forEach(item => item.classList.remove('selected'));
   card.classList.add('selected');
   const offer = { service: card.dataset.service, old: card.dataset.old, new: card.dataset.new };
-  window.cvzoneOffer = null;
+  const couponReady = document.body.classList.contains('coupon-ready');
+  window.cvzoneOffer = couponReady ? offer : null;
   document.getElementById('f-service').value = offer.service;
-  document.getElementById('offerSummary').innerHTML = '<strong>العرض المختار:</strong> ' + offer.service + ' — السعر قبل الخصم ' + offer.old + ' جنيه. فعّل CVZone لتأكيد سعر العرض ' + offer.new + ' جنيه.';
-  document.getElementById('couponResult').className = 'coupon-result';
-  document.getElementById('couponResult').textContent = 'تم اختيار العرض. اكتب CVZone لتفعيل سعر الحملة.';
-  document.getElementById('order').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (couponReady) {
+    document.getElementById('offerSummary').innerHTML = '<strong>تم تثبيت هديتك:</strong> ' + offer.service + ' — <s>' + offer.old + ' جنيه</s> <strong style="color:#76f3e6">' + offer.new + ' جنيه</strong>.';
+    document.getElementById('couponResult').className = 'coupon-result success';
+    document.getElementById('couponResult').textContent = 'ممتاز! تم اختيار العرض وحفظ سعر هديتك في الطلب.';
+    document.getElementById('order').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else {
+    document.getElementById('offerSummary').innerHTML = '<strong>العرض المختار:</strong> ' + offer.service + ' — السعر الأساسي ' + offer.old + ' جنيه. انسخ CVZone لتفعيل سعر الهدية ' + offer.new + ' جنيه.';
+    document.getElementById('couponResult').className = 'coupon-result';
+    document.getElementById('couponResult').textContent = 'انسخ كود CVZone لتفعيل سعر هديتك لهذا العرض.';
+  }
 }
 function applyCoupon() {
   const input = document.getElementById('couponInput');
@@ -1810,27 +1896,21 @@ function applyCoupon() {
     result.textContent = 'الكود غير صحيح. تأكد من كتابة CVZone ثم حاول مرة أخرى.';
     return;
   }
-  input.value = 'CVZone';
+  armCoupon();
   if (!offer) {
-    result.className = 'coupon-result success';
-    result.textContent = 'تم حفظ الكوبون. اختر عرضاً من البطاقات لتفعيل سعره.';
     return;
   }
-  window.cvzoneOffer = { service: offer.dataset.service, old: offer.dataset.old, new: offer.dataset.new };
-  result.className = 'coupon-result success';
-  result.textContent = 'تم تفعيل كود CVZone بنجاح — سعر العرض مُثبت في طلبك.';
-  document.getElementById('offerSummary').innerHTML = '<strong>تم تفعيل العرض:</strong> ' + window.cvzoneOffer.service + ' — <s>' + window.cvzoneOffer.old + ' جنيه</s> <strong style="color:#76f3e6">' + window.cvzoneOffer.new + ' جنيه</strong>.';
+  chooseOffer(offer);
 }
 async function copyCoupon() {
   const code = 'CVZone';
   try { await navigator.clipboard.writeText(code); } catch (_) {
     const input = document.getElementById('couponInput'); input.value = code; input.select(); document.execCommand('copy');
   }
-  document.getElementById('couponInput').value = code;
-  document.getElementById('couponResult').className = 'coupon-result success';
-  document.getElementById('couponResult').textContent = 'تم نسخ الكوبون. الصقه أو اضغط تفعيل العرض.';
+  armCoupon({ copied: true });
 }
 setTheme(localStorage.getItem('cvzone-theme') || 'dark');
+if (!sessionStorage.getItem('cvzone-welcome-seen')) window.setTimeout(() => document.getElementById('welcomeModal').classList.add('is-open'), 650);
 
 /* Shake animation */
 const shakeStyle = document.createElement('style');
