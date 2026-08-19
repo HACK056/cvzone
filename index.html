@@ -814,6 +814,178 @@ footer {
   .footer-links { gap: 14px; }
   .hero-cta { width: 100%; justify-content: center; }
 }
+/* ══════════════════════════════
+   PREMIUM CAREER STUDIO — VISUAL SYSTEM
+══════════════════════════════ */
+:root {
+  --gold: #0fa89f;
+  --gold-light: #e8fffc;
+  --gold-dark: #087f79;
+  --text: #172a3a;
+  --text-dim: #526677;
+  --text-muted: #778b9a;
+  --border: #dce7ec;
+  --glass-bg: #ffffff;
+  --gradient-gold: linear-gradient(135deg, #0da79e, #24c8bd);
+  --shadow-gold: 0 14px 30px rgba(15, 168, 159, 0.16);
+}
+body {
+  color: var(--text);
+  background: #f4f7f8;
+  background-image: none;
+}
+body::before, .site-bg, .site-bg-overlay { display: none; }
+
+nav {
+  background: rgba(255, 255, 255, 0.94);
+  border-bottom: 1px solid rgba(12, 42, 59, 0.1);
+  box-shadow: 0 4px 18px rgba(11, 36, 50, 0.05);
+  backdrop-filter: blur(16px);
+}
+nav.scrolled {
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 8px 24px rgba(11, 36, 50, 0.1);
+}
+.nav-links a { color: #3d5262; font-weight: 600; }
+.nav-links a:hover { color: var(--gold-dark); }
+.nav-wa {
+  color: #fff;
+  background: var(--gradient-gold);
+  border-color: transparent;
+  border-radius: 10px;
+  box-shadow: 0 8px 18px rgba(15, 168, 159, 0.18);
+}
+.nav-wa:hover { background: #087f79; color: #fff; }
+.menu-toggle { color: var(--gold-dark); }
+
+#hero {
+  min-height: 660px;
+  padding: 155px 5% 86px;
+  background:
+    radial-gradient(circle at 50% 5%, rgba(57, 209, 195, 0.17), transparent 31rem),
+    linear-gradient(135deg, #061c2a 0%, #0a2c3a 58%, #071f2c 100%);
+}
+#hero::before {
+  width: min(58vw, 680px);
+  top: 38px;
+  background: radial-gradient(circle, rgba(78, 237, 221, 0.2), rgba(22, 150, 152, 0.05) 40%, transparent 70%);
+  animation: none;
+}
+.hero-logo {
+  width: 126px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.25);
+  animation: none;
+}
+.hero-title {
+  font-size: clamp(36px, 5.5vw, 66px);
+  max-width: 950px;
+  margin: 0 auto 18px;
+  color: #fff;
+  letter-spacing: -0.6px;
+}
+.hero-title span { color: #65eee0; background: none; -webkit-text-fill-color: #65eee0; }
+.hero-sub { color: #c6d8df; max-width: 660px; font-size: 17px; }
+.trust-bar { gap: 14px; }
+.trust-item {
+  min-width: 150px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(222, 255, 250, 0.2);
+  border-radius: 12px;
+  box-shadow: none;
+  backdrop-filter: blur(8px);
+}
+.trust-item:hover { transform: translateY(-3px); background: rgba(255,255,255,0.12); box-shadow: none; }
+.trust-num { color: #67eee1; }
+.trust-label { color: #b8cbd2; }
+.hero-cta, .submit-btn {
+  background: var(--gradient-gold);
+  color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(16, 181, 170, 0.2);
+}
+.hero-cta::after { display: none; }
+.hero-cta:hover, .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(16, 181, 170, 0.26); }
+
+#services, #testimonials { background: #f4f7f8; }
+#portfolio, #order { background: #fff; }
+#services, #portfolio, #testimonials, #order {
+  padding-top: 92px;
+  padding-bottom: 92px;
+}
+.section-title { color: #102b3d; font-size: clamp(25px, 3vw, 35px); }
+.section-title span { color: var(--gold-dark); }
+.section-title::after { width: 42px; height: 3px; background: var(--gold); }
+
+.service-card {
+  background: #fff;
+  border: 1px solid #dfe9ed;
+  border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(15, 49, 67, 0.05);
+  backdrop-filter: none;
+}
+.service-card:hover { border-color: rgba(15, 168, 159, 0.55); box-shadow: 0 16px 30px rgba(15, 49, 67, 0.1); }
+.service-title { color: #173247; }
+.service-desc { color: #617687; }
+.service-icon { color: var(--gold-dark); }
+
+.portfolio-grid { gap: 26px; max-width: 1180px; margin: 0 auto; }
+.cv-card { border: 1px solid #dce7ec; border-radius: 14px; box-shadow: 0 12px 26px rgba(15, 49, 67, 0.07); background: #fff; }
+.cv-card:hover { border-color: var(--gold); box-shadow: 0 18px 34px rgba(15, 49, 67, 0.14); }
+.cv-img-wrap img { filter: brightness(0.97); }
+.cv-card:hover .cv-img-wrap img { filter: brightness(0.92); }
+.cv-watermark-text { color: rgba(8, 39, 54, 0.14); text-shadow: none; }
+
+.review-box, .add-comment-area {
+  background: #fff;
+  border: 1px solid #dfe9ed;
+  box-shadow: 0 9px 22px rgba(15, 49, 67, 0.05);
+  backdrop-filter: none;
+}
+.review-box:hover { transform: translateY(-3px); border-color: rgba(15, 168, 159, 0.55); box-shadow: 0 14px 28px rgba(15, 49, 67, 0.09); }
+.user-name, .review-text, .reply b, .uc-name { color: #203a4c; }
+.review-text, .uc-text { color: #4f6576; }
+.reply-chain { border-right-color: #76d9d1; }
+.comment-input, .reply-form input {
+  color: #173247;
+  background: #f7fafb;
+  border-color: #dbe6eb;
+}
+.comment-input::placeholder, .input::placeholder { color: #98aab5; }
+.comment-submit-btn { background: #143548; color: #fff; }
+.comment-submit-btn:hover { background: #0d8290; }
+.testimonial-img-card { background: #fff; border-color: #dce7ec; backdrop-filter: none; }
+
+.form-card {
+  background: #fff;
+  border: 1px solid #dce7ec;
+  border-radius: 16px;
+  box-shadow: 0 18px 40px rgba(15, 49, 67, 0.08);
+  backdrop-filter: none;
+}
+.form-title { color: #102b3d; }
+.label { color: #526677; }
+.input { color: #173247; background: #f7fafb; border-color: #dbe6eb; }
+.input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(15, 168, 159, 0.12); }
+.form-success h3 { color: #173247; }
+
+footer { background: #071f2c; border-top: none; backdrop-filter: none; }
+.footer-slogan, .footer-links a, .footer-social a { color: #b7c9d0; }
+.footer-social a { border-color: rgba(202, 236, 235, 0.18); }
+.footer-links a:hover, .footer-social a:hover { color: #6beee1; border-color: #6beee1; }
+
+@media (max-width: 768px) {
+  nav { padding: 8px 4%; }
+  .nav-logo-img { height: 46px; }
+  #hero { min-height: 620px; padding: 132px 5% 68px; }
+  .hero-logo { width: 108px; }
+  .hero-title { font-size: 34px; line-height: 1.35; }
+  #services, #portfolio, #testimonials, #order { padding-top: 66px; padding-bottom: 66px; }
+  .form-card { padding: 26px 18px; }
+  .nav-links.active { background: #fff; border-bottom-color: #dce7ec; }
+}
 </style>
 </head>
 <body>
