@@ -1116,6 +1116,8 @@ body.light-mode footer { background: #071f2c; }
   body:not(.light-mode) .nav-links.active { background: rgba(5, 14, 24, .98); border-bottom-color: rgba(147, 230, 224, .14); }
   .theme-toggle { margin-right: 0; margin-left: 6px; }
 }
+.cvworld-section{position:relative;min-height:650px;padding:92px 5vw 76px;background:radial-gradient(circle at 50% 15%,rgba(57,224,210,.14),transparent 42%),#06151f;overflow:hidden;border-top:1px solid rgba(120,240,228,.12);border-bottom:1px solid rgba(120,240,228,.1)}
+.cvworld-heading{position:relative;z-index:2;text-align:center;max-width:760px;margin:0 auto 28px}.cvworld-heading .eyebrow{color:#61eee1;font-size:12px;font-weight:900;letter-spacing:2px}.cvworld-heading h2{margin:10px 0;color:#f4fffe;font-size:clamp(28px,4vw,48px)}.cvworld-heading p{color:#9eb9c1;line-height:1.9}.cvworld-stage{position:relative;z-index:1;max-width:1180px;height:480px;margin:auto;border:1px solid rgba(115,235,225,.25);border-radius:28px;overflow:hidden;background:linear-gradient(180deg,rgba(4,18,28,.2),rgba(2,11,18,.74));box-shadow:0 28px 80px rgba(0,0,0,.32),inset 0 0 80px rgba(43,225,208,.06)}#cvworldCanvas{display:block;width:100%;height:100%;touch-action:none}.cvworld-panel{position:absolute;right:22px;top:22px;width:min(310px,calc(100% - 44px));padding:20px;border:1px solid rgba(125,243,232,.3);border-radius:20px;background:rgba(3,19,28,.78);backdrop-filter:blur(16px);color:#edfefd;box-shadow:0 16px 40px rgba(0,0,0,.28)}.cvworld-panel h3{margin:0 0 8px;font-size:21px}.cvworld-panel p{margin:0 0 15px;color:#a7c1c7;line-height:1.7;font-size:13px}.cvworld-actions{display:flex;gap:8px;flex-wrap:wrap}.cvworld-btn{border:0;border-radius:11px;padding:10px 13px;background:#5ce9da;color:#062027;font-weight:900;cursor:pointer}.cvworld-btn.alt{background:rgba(255,255,255,.08);color:#d8fffb;border:1px solid rgba(255,255,255,.14)}.cvworld-legend{position:absolute;left:22px;bottom:20px;display:flex;gap:8px;flex-wrap:wrap}.cvworld-chip{padding:8px 11px;border-radius:999px;background:rgba(2,18,27,.78);border:1px solid rgba(255,255,255,.12);color:#c8e6e5;font-size:12px}.cvworld-chip b{color:#f2c76b}.cvworld-fallback{display:none;position:absolute;inset:0;place-items:center;text-align:center;padding:30px;color:#cde8e6;background:linear-gradient(135deg,#0b2833,#06131d)}@media(max-width:700px){.cvworld-section{padding:65px 16px 50px}.cvworld-stage{height:620px;border-radius:20px}.cvworld-panel{right:14px;top:14px;width:calc(100% - 28px)}.cvworld-legend{left:14px;bottom:14px}.cvworld-heading p{font-size:14px}}
 </style>
 </head>
 <body>
@@ -1173,6 +1175,12 @@ body.light-mode footer { background: #071f2c; }
   <a href="#order" class="hero-cta" data-aos="fade-up" data-aos-delay="300">
     <i class="fas fa-file-alt"></i> ابدأ سيرتك الذاتية الآن
   </a>
+</section>
+
+<!-- ═══ CVZONE 3D WORLD ═══ -->
+<section class="cvworld-section" id="cvworld" aria-labelledby="cvworldTitle">
+  <div class="cvworld-heading"><div class="eyebrow">CV ZONE · INTERACTIVE CAREER WORLD</div><h2 id="cvworldTitle">اكتشف مسارك المهني داخل عالمك</h2><p>تجوّل بين بوابات السيرة والخدمات والعروض. كل بوابة تنقلك مباشرة إلى جزء حقيقي من CV Zone.</p></div>
+  <div class="cvworld-stage"><canvas id="cvworldCanvas" aria-label="عالم CV Zone ثلاثي الأبعاد"></canvas><div class="cvworld-fallback" id="cvworldFallback">التجربة ثلاثية الأبعاد تحتاج متصفحاً يدعم WebGL.<br>يمكنك استخدام أقسام الموقع أسفل هذه المحطة.</div><div class="cvworld-panel"><h3 id="cvworldPanelTitle">بوابة البداية</h3><p id="cvworldPanelText">ابدأ من ملفك المهني، ثم انتقل إلى الخدمة أو العرض الأنسب لك.</p><div class="cvworld-actions"><button class="cvworld-btn" type="button" id="cvworldOpen">ابدأ المسار</button><button class="cvworld-btn alt" type="button" id="cvworldNext">البوابة التالية</button></div></div><div class="cvworld-legend"><span class="cvworld-chip"><b>1</b> ملفك</span><span class="cvworld-chip"><b>2</b> خدماتنا</span><span class="cvworld-chip"><b>3</b> العروض</span></div></div>
 </section>
 
 <!-- ═══ SERVICES ═══ -->
@@ -1918,5 +1926,36 @@ shakeStyle.textContent = `@keyframes shake { 0%,100%{transform:translateX(0)} 20
 document.head.appendChild(shakeStyle);
 </script>
 
+<script src="https://cdn.babylonjs.com/babylon.js"></script>
+<script>
+(function(){
+  const canvas=document.getElementById('cvworldCanvas'); if(!canvas||!window.BABYLON)return;
+  const fallback=document.getElementById('cvworldFallback');
+  const stages=[
+    {title:'بوابة ملفك المهني',text:'ابدأ من نموذج الطلب واكتب بياناتك لتجهيز السيرة المناسبة.',target:'#order'},
+    {title:'مدينة الخدمات',text:'استكشف تصميم CV وCover Letter وتحسين LinkedIn.',target:'#services'},
+    {title:'سوق العروض',text:'شاهد الباقات والأسعار وفَعّل كود CVZone.',target:'#offers'}
+  ]; let active=0;
+  const title=document.getElementById('cvworldPanelTitle'), text=document.getElementById('cvworldPanelText'), open=document.getElementById('cvworldOpen'), next=document.getElementById('cvworldNext');
+  function update(){const s=stages[active];title.textContent=s.title;text.textContent=s.text;open.textContent=active===0?'املأ بياناتك':'افتح '+s.title.replace('بوابة ','').replace('مدينة ','').replace('سوق ','');}
+  open.addEventListener('click',()=>document.querySelector(stages[active].target)?.scrollIntoView({behavior:'smooth',block:'start'}));
+  next.addEventListener('click',()=>{active=(active+1)%stages.length;update();focusStage(active)}); update();
+  let engine,scene,camera,glow,portals=[];
+  function focusStage(i){if(portals[i]){const p=portals[i].position; camera.setTarget(new BABYLON.Vector3(p.x,1.1,p.z));}}
+  try{
+    engine=new BABYLON.Engine(canvas,true,{preserveDrawingBuffer:true,stencil:true}); scene=new BABYLON.Scene(engine); scene.clearColor=new BABYLON.Color4(.015,.06,.09,1);
+    camera=new BABYLON.ArcRotateCamera('cvCamera',-Math.PI/2.1,Math.PI/2.65,16,new BABYLON.Vector3(0,1,0),scene);camera.attachControl(canvas,true);camera.lowerRadiusLimit=9;camera.upperRadiusLimit=22;
+    const hemi=new BABYLON.HemisphericLight('cvHemi',new BABYLON.Vector3(0,1,0),scene);hemi.intensity=.7; const point=new BABYLON.PointLight('cvPoint',new BABYLON.Vector3(0,5,0),scene);point.diffuse=new BABYLON.Color3(.25,1,.9);point.intensity=18;
+    const ground=BABYLON.MeshBuilder.CreateGround('cvGround',{width:24,height:16},scene);const gm=new BABYLON.StandardMaterial('groundMat',scene);gm.diffuseColor=new BABYLON.Color3(.018,.11,.14);gm.specularColor=new BABYLON.Color3(.05,.25,.25);ground.material=gm;
+    const mat=(name,color,emissive)=>{const m=new BABYLON.StandardMaterial(name,scene);m.diffuseColor=BABYLON.Color3.FromHexString(color);m.emissiveColor=BABYLON.Color3.FromHexString(emissive||color);m.emissiveIntensity=.7;return m};
+    const cyan=mat('cyan','#1ab9b0','#35f4df'), gold=mat('gold','#c89135','#f3cb73'), white=mat('white','#cbe8e7','#b9fffa');
+    const positions=[new BABYLON.Vector3(-5,1.25,0),new BABYLON.Vector3(0,1.25,0),new BABYLON.Vector3(5,1.25,0)];
+    positions.forEach((pos,i)=>{const root=new BABYLON.TransformNode('portal'+i,scene);root.position=pos;const ring=BABYLON.MeshBuilder.CreateTorus('ring'+i,{diameter:2.9,thickness:.12,tessellation:48},scene);ring.parent=root;ring.rotation.x=Math.PI/2;ring.material=i===2?gold:cyan;const core=BABYLON.MeshBuilder.CreateCylinder('core'+i,{height:1.7,diameter:.95,tessellation:24},scene);core.parent=root;core.material=white;const orb=BABYLON.MeshBuilder.CreateSphere('orb'+i,{diameter:.34},scene);orb.parent=root;orb.position.y=1.7;orb.material=i===2?gold:cyan;portals.push(root)});
+    const path=BABYLON.MeshBuilder.CreateLines('careerPath',{points:positions.map(p=>new BABYLON.Vector3(p.x,.03,p.z))},scene);path.color=new BABYLON.Color3(.95,.68,.28);
+    scene.onBeforeRenderObservable.add(()=>{const t=performance.now()*.001;portals.forEach((p,i)=>{p.rotation.y=t*(.35+i*.08);p.position.y=1.25+Math.sin(t*1.2+i)*.08});point.position.x=Math.sin(t*.7)*5;point.position.z=Math.cos(t*.7)*3});
+    engine.runRenderLoop(()=>scene.render());window.addEventListener('resize',()=>engine.resize()); canvas.addEventListener('pointerdown',()=>{active=(active+1)%stages.length;update();focusStage(active)});
+  }catch(e){console.warn('CVZone 3D unavailable',e);fallback.style.display='grid'}
+})();
+</script>
 </body>
 </html>
