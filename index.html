@@ -195,6 +195,25 @@ nav.scrolled {
   transition: 0.3s;
 }
 .nav-wa:hover { background: var(--gold); color: #000; }
+.auth-actions { display:flex; align-items:center; gap:7px; margin-inline:8px; }
+.auth-link { color:var(--text-dim); background:transparent; border:1px solid var(--border); border-radius:8px; padding:8px 10px; text-decoration:none; font-size:12px; white-space:nowrap; cursor:pointer; }
+.auth-link:hover { color:var(--gold); border-color:var(--gold); }
+.auth-user { color:var(--gold); font-size:11px; max-width:130px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.auth-modal { position:fixed; inset:0; z-index:3000; display:grid; place-items:center; background:rgba(0,0,0,.72); padding:18px; }
+.auth-modal[hidden] { display:none; }
+.auth-box { width:min(430px,100%); background:var(--card); color:var(--text); border:1px solid var(--border); border-radius:16px; padding:24px; box-shadow:0 20px 70px rgba(0,0,0,.45); position:relative; }
+.auth-close { position:absolute; left:14px; top:10px; border:0; background:transparent; color:var(--text-dim); font-size:22px; cursor:pointer; }
+.auth-box h2 { margin:0 0 7px; color:var(--gold); }
+.auth-box .auth-field { display:grid; gap:6px; margin:12px 0; }
+.auth-box .auth-field label { font-size:12px; color:var(--text-dim); }
+.auth-box .auth-field input { width:100%; border:1px solid var(--border); background:rgba(0,0,0,.18); color:var(--text); padding:11px; border-radius:8px; }
+.auth-submit { width:100%; border:0; background:var(--gold); color:#081014; padding:11px; border-radius:8px; font-weight:800; cursor:pointer; margin-top:6px; }
+.auth-secondary { border:0; background:none; color:var(--gold); cursor:pointer; padding:8px 0; font-size:12px; }
+.auth-message { min-height:20px; color:#ffb1b8; font-size:12px; margin-top:10px; }
+.dynamic-announcements { position:relative; z-index:5; margin:100px auto -70px; width:min(1100px,90%); padding:12px 18px; border:1px solid var(--gold); border-radius:10px; background:rgba(197,164,92,.1); color:var(--text); text-align:center; }
+.dynamic-announcements strong { color:var(--gold); margin-left:6px; }
+@media(max-width:1000px){.auth-actions{margin-inline:2px}.auth-user{display:none}.auth-link{padding:7px 8px}.nav-wa{padding:7px 9px}}
+@media(max-width:795px){.auth-actions{display:flex; margin-right:auto}.auth-link{font-size:11px}.auth-actions .auth-user{display:none}}
 
 /* Mobile Menu */
 .menu-toggle {
@@ -1155,10 +1174,36 @@ body.light-mode footer { background: #071f2c; }
     <li><a href="#order" onclick="closeMenu()">طلب خدمة</a></li>
   </ul>
   <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="تبديل الوضع الفاتح والداكن" title="تبديل المظهر"><i class="fas fa-sun"></i></button>
+  <div class="auth-actions" aria-label="الحساب">
+    <span class="auth-user" id="authUserLabel" hidden></span>
+    <a class="auth-link" id="authDashboardLink" href="user-dashboard.html" hidden><i class="fas fa-user-circle"></i> حسابي</a>
+    <button class="auth-link" id="authLoginButton" type="button"><i class="fas fa-sign-in-alt"></i> دخول / إنشاء حساب</button>
+    <button class="auth-link" id="authLogoutButton" type="button" hidden><i class="fas fa-sign-out-alt"></i> خروج</button>
+  </div>
   <a href="https://wa.me/201092977623" class="nav-wa" target="_blank" rel="noopener">
     <i class="fab fa-whatsapp"></i> تواصل واتساب
   </a>
 </nav>
+
+<div class="auth-modal" id="authModal" hidden>
+  <div class="auth-box" role="dialog" aria-modal="true" aria-labelledby="authModeTitle">
+    <button class="auth-close" type="button" data-auth-close aria-label="إغلاق">×</button>
+    <h2 id="authModeTitle">تسجيل الدخول</h2>
+    <p style="font-size:12px;color:var(--text-dim);margin-top:0">التسجيل اختياري. يمكنك استخدام الموقع وطلب الخدمة بدون حساب.</p>
+    <form id="authForm">
+      <div class="auth-field" id="authNameGroup" hidden><label for="authName">الاسم</label><input id="authName" name="name" autocomplete="name"></div>
+      <div class="auth-field" id="authPhoneGroup" hidden><label for="authPhone">رقم الهاتف</label><input id="authPhone" name="phone" type="tel" autocomplete="tel"></div>
+      <div class="auth-field"><label for="authEmail">البريد الإلكتروني</label><input id="authEmail" name="email" type="email" required autocomplete="email"></div>
+      <div class="auth-field"><label for="authPassword">كلمة السر</label><input id="authPassword" name="password" type="password" minlength="6" required autocomplete="current-password"></div>
+      <button class="auth-submit" id="authSubmit" type="submit">دخول</button>
+      <button class="auth-secondary" id="authReset" type="button">نسيت كلمة السر؟</button>
+      <button class="auth-secondary" id="authSwitch" type="button">إنشاء حساب جديد اختيارياً</button>
+      <div class="auth-message" id="authMessage" aria-live="polite"></div>
+    </form>
+  </div>
+</div>
+
+<div id="dynamicAnnouncements" class="dynamic-announcements" hidden aria-live="polite"></div>
 
 <!-- ═══ HERO ═══ -->
 <section id="hero">
@@ -1696,6 +1741,50 @@ loadTestimonials();
 loadComments();
 loadSiteSettings();
 incrementVisits();
+</script>
+
+<script type="module">
+import { mountAuthUI } from './auth.js';
+import { db } from './firebase-config.js';
+import { collection, query, where, orderBy, getDocs, addDoc, serverTimestamp, limit } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+mountAuthUI();
+
+const safeText = value => String(value ?? '').replace(/[&<>\"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]));
+async function loadManagedContent() {
+  try {
+    const snap = await getDocs(collection(db, 'content'));
+    snap.forEach(item => {
+      const data = item.data();
+      const target = document.getElementById(data.key);
+      if (target && data.active !== false) target.textContent = data.value ?? '';
+    });
+  } catch (error) { console.debug('Managed content unavailable', error); }
+}
+async function loadManagedAnnouncements() {
+  try {
+    const now = new Date();
+    const snap = await getDocs(query(collection(db, 'announcements'), where('active', '==', true), orderBy('createdAt', 'desc'), limit(3)));
+    const items = snap.docs.map(item => item.data()).filter(item => {
+      const start = item.startsAt?.toDate?.() || (item.startsAt ? new Date(item.startsAt) : null);
+      const end = item.endsAt?.toDate?.() || (item.endsAt ? new Date(item.endsAt) : null);
+      return (!start || start <= now) && (!end || end >= now);
+    });
+    const banner = document.getElementById('dynamicAnnouncements');
+    if (items.length && banner) {
+      banner.innerHTML = items.map(item => `<strong>${safeText(item.title)}</strong><span>${safeText(item.body)}</span>`).join(' <span aria-hidden="true"> | </span> ');
+      banner.hidden = false;
+    }
+  } catch (error) { console.debug('Managed announcements unavailable', error); }
+}
+async function trackPublicVisit() {
+  try {
+    const deviceType = /Mobi|Android/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop';
+    await addDoc(collection(db, 'analytics_events'), { type:'page_view', path:location.pathname, deviceType, sessionId:sessionStorage.getItem('cvzone_session') || crypto.randomUUID(), createdAt:serverTimestamp() });
+  } catch (error) { console.debug('Analytics unavailable', error); }
+}
+loadManagedContent();
+loadManagedAnnouncements();
+trackPublicVisit();
 </script>
 
 <script>
